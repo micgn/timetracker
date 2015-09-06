@@ -1,0 +1,9 @@
+target
+.project
+.classpath
+.settings
+.idea
+*.iml
+*.log
+TimeTrackerWeb/src/main/webapp/VAADIN/gwt-unitCache
+TimeTrackerWeb/src/main/webapp/VAADIN/widgetsets/

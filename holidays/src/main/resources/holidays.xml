@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<HolidaysConfig>
+	<holiday>
+		<date>1.1.*</date>
+		<desc>Neujahr</desc>
+	</holiday>
+	<holiday>
+		<date>6.1.*</date>
+		<desc>Heilige Drei Könige</desc>
+	</holiday>
+	<holiday>
+		<date>1.5.*</date>
+		<desc>Tag der Arbeit</desc>
+	</holiday>
+	<holiday>
+		<date>15.8.*</date>
+		<desc>Maria Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>3.10.*</date>
+		<desc>Tag der deutschen Einheit</desc>
+	</holiday>
+	<holiday>
+		<date>1.11.*</date>
+		<desc>Allerheiligen</desc>
+	</holiday>
+	<holiday>
+		<date>25.12.*</date>
+		<desc>Weihnachten</desc>
+	</holiday>
+	<holiday>
+		<date>26.12.*</date>
+		<desc>Weihnachten</desc>
+	</holiday>
+	
+	
+	<holiday>
+		<date>3.4.2015</date>
+		<desc>Karfreitag</desc>
+	</holiday>
+	<holiday>
+		<date>6.4.2015</date>
+		<desc>Ostermontag</desc>
+	</holiday>
+	<holiday>
+		<date>14.5.2015</date>
+		<desc>Christi Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>25.5.2015</date>
+		<desc>Pfingstmontag</desc>
+	</holiday>
+	<holiday>
+		<date>4.6.2015</date>
+		<desc>Fronleichnam</desc>
+	</holiday>
+	
+	<holiday>
+		<date>25.3.2016</date>
+		<desc>Karfreitag</desc>
+	</holiday>
+	<holiday>
+		<date>28.3.2016</date>
+		<desc>Ostermontag</desc>
+	</holiday>
+	<holiday>
+		<date>5.5.2016</date>
+		<desc>Christi Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>16.5.2016</date>
+		<desc>Pfingstmontag</desc>
+	</holiday>
+	<holiday>
+		<date>26.5.2016</date>
+		<desc>Fronleichnam</desc>
+	</holiday>
+	
+	<holiday>
+		<date>14.4.2017</date>
+		<desc>Karfreitag</desc>
+	</holiday>
+	<holiday>
+		<date>17.4.2017</date>
+		<desc>Ostermontag</desc>
+	</holiday>
+	<holiday>
+		<date>25.5.2017</date>
+		<desc>Christi Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>5.6.2017</date>
+		<desc>Pfingstmontag</desc>
+	</holiday>
+	<holiday>
+		<date>15.6.2017</date>
+		<desc>Fronleichnam</desc>
+	</holiday>
+	
+	
+</HolidaysConfig>

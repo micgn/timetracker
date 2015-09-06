@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<HolidaysConfig>
+	<holiday>
+		<date>1.1.2015</date>
+		<desc>Neujahr</desc>
+	</holiday>
+	<holiday>
+		<date>25.12.2016</date>
+		<desc>Weihnachten</desc>
+	</holiday>
+	<holiday>
+		<date>1.10.*</date>
+		<desc>Geburtstag</desc>
+	</holiday>
+</HolidaysConfig>
