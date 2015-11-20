@@ -260,6 +260,8 @@ class TTUIController extends UI {
 
     // register downloader at export button
     new FileDownloader(exportStream).extend(actionVM.exportBtn)
+
+    new FileDownloader(exportPerDayStream).extend(actionVM.exportPerDayBtn)
   }
 
   def reloadCategories = {
@@ -367,6 +369,19 @@ class TTUIController extends UI {
   def export: String = {
     reloadTable
     service.buildExportCsv(filterCriteria)
+  }
+
+  def exportPerDayStream: StreamResource = {
+    new StreamResource(new StreamSource {
+      override def getStream: InputStream = {
+        new ByteArrayInputStream(exportPerDay.getBytes("UTF-8"))
+      }
+    }, "days.csv")
+  }
+
+  def exportPerDay: String = {
+    reloadTable
+    service.buildPerDayExportCsv(filterCriteria)
   }
 
 

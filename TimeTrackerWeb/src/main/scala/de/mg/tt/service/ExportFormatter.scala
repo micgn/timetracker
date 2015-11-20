@@ -45,8 +45,17 @@ class ExportFormatter {
       exp
   }
 
+  def toCsv(d : Date, len: Long): String = {
+    dateStr(d) + ";" + len + "\n";
+  }
+
   private def timeStr(d: Date) = {
     val df = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.GERMANY)
+    df.format(DateHelper.getRightTimeDueToVaadinBug(d))
+  }
+
+  private def dateStr(d: Date) = {
+    val df = new SimpleDateFormat("dd.MM.yy", Locale.GERMANY)
     df.format(DateHelper.getRightTimeDueToVaadinBug(d))
   }
 }

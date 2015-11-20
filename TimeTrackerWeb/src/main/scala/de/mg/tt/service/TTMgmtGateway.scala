@@ -146,6 +146,16 @@ class TTMgmtGateway extends TTMgmt {
     exp
   }
 
+  def buildPerDayExportCsv(filterCriteria: FilterCriteria): String = {
+    var exp = "";
+    findActivities(filterCriteria).
+      groupBy(a => DateHelper.dayStart(a.from)).
+      map { case (date, activities) =>
+          (date, activities.foldLeft(0L)((sum: Long, activity: Activity) => sum + activity.len)) }.
+      foreach { case (date, len) => exp += exportFormatter.toCsv(date, len) };
+    exp;
+  }
+
   def resetSession(): Unit = {
     activityCache = Nil
     categoryCache = Nil

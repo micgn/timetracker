@@ -34,5 +34,6 @@ class ActionViewModel {
   val delCatChooser = new NativeSelect
   val delCatBtn = new Button
   val exportBtn = new Button
+  val exportPerDayBtn = new Button
   val openMoneyCalc = new Button
 }

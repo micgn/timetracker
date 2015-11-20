@@ -52,6 +52,8 @@ abstract class TTMgmt {
 
    def buildExportCsv(filterCriteria: FilterCriteria): String
 
+   def buildPerDayExportCsv(filterCriteria: FilterCriteria): String
+
    def resetSession(): Unit
 
  }

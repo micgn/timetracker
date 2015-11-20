@@ -106,6 +106,8 @@ object ActionView {
     exportContP.addComponent(exportP)
     btn(m.exportBtn, "export")
     exportP.addComponent(m.exportBtn)
+    btn(m.exportPerDayBtn, "day export")
+    exportP.addComponent(m.exportPerDayBtn)
     btn(m.openMoneyCalc, "calculate")
     exportP.addComponent(m.openMoneyCalc)
   }
