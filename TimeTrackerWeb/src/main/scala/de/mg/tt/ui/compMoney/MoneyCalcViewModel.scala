@@ -15,7 +15,7 @@
  */
 package de.mg.tt.ui.compMoney
 
-import com.vaadin.ui.{TextField, Window}
+import com.vaadin.ui.{Button, TextField, Window}
 
 /**
  * Created by gnatz on 7/26/15.
@@ -27,4 +27,5 @@ class MoneyCalcViewModel {
   val tax = new TextField
   val moneyWithTax = new TextField
   val moneyWithoutTax = new TextField
+  val moneyCalcBtn = new Button
 }

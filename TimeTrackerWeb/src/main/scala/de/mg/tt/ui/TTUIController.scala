@@ -69,7 +69,7 @@ class TTUIController extends UI {
     layout.setupLayout
     initData
     registerListeners
-    MoneyController.registerListeners(actionVM.openMoneyCalc, moneyVM, filterCriteria, service)
+    MoneyController.registerListeners(actionVM.openMoneyCalc, moneyVM.moneyCalcBtn, moneyVM, this, service)
     val daysController = new DaysController(filterVM)
     daysController.init
   }

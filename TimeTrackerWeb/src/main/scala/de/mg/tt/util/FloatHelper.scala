@@ -34,7 +34,10 @@ object FloatHelper {
     else {
       val fOpt = parse(s.replace(".", ","))
       if (fOpt.nonEmpty) fOpt.get
-      else parse(s.replace(",", ".")).get
+      else {
+        val fOpt2 = parse(s.replace(",", "."))
+        if (fOpt2.nonEmpty) fOpt2.get else 0.0f
+      }
     }
   }
 

@@ -27,16 +27,18 @@ import de.mg.tt.util.FloatHelper._
  */
 object MoneyController {
 
-  def registerListeners(openBtn: Button, moneyVM: MoneyCalcViewModel,
-                        filterCriteria: FilterCriteria, service: TTMgmtGateway) = {
+  def registerListeners(openBtn: Button, calcBtn: Button, moneyVM: MoneyCalcViewModel,
+                        controller: TTUIController, service: TTMgmtGateway) = {
 
     listener(openBtn, {
-      val activities = service.findActivities(filterCriteria)
-      val hours = activities.map(a => a.len).reduce((l1, l2) => l1 + l2) / 60.0
-      MoneyCalcView.openMoneyCalcWindow(moneyVM, hours.toFloat)
+      val activities = service.findActivities(controller.filterCriteria)
+      if (activities.size > 0) {
+        val hours = activities.map(a => a.len).reduce((l1, l2) => l1 + l2) / 60.0
+        MoneyCalcView.openMoneyCalcWindow(moneyVM, hours.toFloat)
+      }
     })
 
-    listener[String](moneyVM.rate, s => {
+    listener(calcBtn, {
       val rateF = toFloat(moneyVM.rate.getValue)
       val hoursF = toFloat(moneyVM.moneyHours.getValue)
       val taxF = 0.19 * rateF * hoursF

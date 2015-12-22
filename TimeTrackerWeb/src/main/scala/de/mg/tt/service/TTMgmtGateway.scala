@@ -147,12 +147,17 @@ class TTMgmtGateway extends TTMgmt {
   }
 
   def buildPerDayExportCsv(filterCriteria: FilterCriteria): String = {
-    var exp = "";
-    findActivities(filterCriteria).
+
+    val timesPerDay =
+      findActivities(filterCriteria).
       groupBy(a => DateHelper.dayStart(a.from)).
       map { case (date, activities) =>
-          (date, activities.foldLeft(0L)((sum: Long, activity: Activity) => sum + activity.len)) }.
-      foreach { case (date, len) => exp += exportFormatter.toCsv(date, len) };
+          (date, activities.foldLeft(0L)((sum: Long, activity: Activity) => sum + activity.len)) }
+
+    var exp = "Datum;Datum;Minuten;Stunden\n";
+    timesPerDay.toList.sortBy{ case (date, len) => date }.
+      foreach { case (date, len) => exp += exportFormatter.toRichCsv(date, len) };
+
     exp;
   }
 

@@ -15,7 +15,8 @@
  */
 package de.mg.tt.service
 
-import java.text.SimpleDateFormat
+import java.math.RoundingMode
+import java.text.{DecimalFormat, SimpleDateFormat}
 import java.util.{Locale, Date}
 import javax.ejb.Stateless
 import javax.inject.Singleton
@@ -49,6 +50,10 @@ class ExportFormatter {
     dateStr(d) + ";" + len + "\n";
   }
 
+  def toRichCsv(d : Date, len: Long): String = {
+    dateStr(d) + ";" + longDateStr(d) + ";" + len + ";" + toHours(len) + "\n";
+  }
+
   private def timeStr(d: Date) = {
     val df = new SimpleDateFormat("dd.MM.yy HH:mm", Locale.GERMANY)
     df.format(DateHelper.getRightTimeDueToVaadinBug(d))
@@ -57,5 +62,16 @@ class ExportFormatter {
   private def dateStr(d: Date) = {
     val df = new SimpleDateFormat("dd.MM.yy", Locale.GERMANY)
     df.format(DateHelper.getRightTimeDueToVaadinBug(d))
+  }
+
+  private def longDateStr(d: Date) = {
+    val df = new SimpleDateFormat("EEEE, dd.MM.", Locale.GERMANY)
+    df.format(DateHelper.getRightTimeDueToVaadinBug(d))
+  }
+
+  private def toHours(minutes: Long) = {
+    val df = new DecimalFormat("#.##")
+    df.setRoundingMode(RoundingMode.DOWN)
+    df.format(minutes / 60.0)
   }
 }

@@ -15,7 +15,8 @@
  */
 package de.mg.tt.ui.compMoney
 
-import com.vaadin.ui.{FormLayout, UI}
+import com.vaadin.ui.{Window, FormLayout, UI}
+import de.mg.tt.ui.utils.LayoutUtils._
 
 /**
  * Created by gnatz on 7/26/15.
@@ -45,16 +46,22 @@ object MoneyCalcView {
     layout.addComponent(m.rate)
 
     m.tax.setCaption("19% tax")
+    m.tax.setValue("")
     //ui.tax.setReadOnly(true)
     layout.addComponent(m.tax)
 
     m.moneyWithoutTax.setCaption("mine")
+    m.moneyWithoutTax.setValue("")
     //ui.moneyWithoutTax.setReadOnly(true)
     layout.addComponent(m.moneyWithoutTax)
 
     m.moneyWithTax.setCaption("tax included")
+    m.moneyWithTax.setValue("")
     //ui.moneyWithTax.setReadOnly(true)
     layout.addComponent(m.moneyWithTax)
+
+    btn(m.moneyCalcBtn, "calculate")
+    layout.addComponent(m.moneyCalcBtn)
 
     UI.getCurrent.addWindow(m.moneyCalcW)
   }
