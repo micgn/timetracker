@@ -30,10 +30,14 @@ import de.mg.holidays.model.HolidaysConfig;
 public class HolidayAPI {
 
     private static final String CONFIG_FILE = "holidays.xml";
-    private HolidaysConfig config;
+    private HolidaysConfig config = null;
 
     public HolidayAPI() {
         File f = ConfigResolver.getFile(CONFIG_FILE);
+        if (f == null) {
+            config = new HolidaysConfig();
+            return;
+        }
         try {
             JAXBContext jaxbContext = JAXBContext
                     .newInstance(HolidaysConfig.class);

@@ -7,3 +7,4 @@ target
 *.log
 TimeTrackerWeb/src/main/webapp/VAADIN/gwt-unitCache
 TimeTrackerWeb/src/main/webapp/VAADIN/widgetsets/
+TimeTrackerWeb/out/
