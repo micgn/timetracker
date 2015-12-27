@@ -80,6 +80,8 @@ class TTMgmtDao {
       .setMaxResults(5000))
   }
 
+  def findAllActivities() = resultList[Activity](em.createNamedQuery("findAllActivities"))
+
   private def resultList[T](query: Query) = query.getResultList.asScala.toList.asInstanceOf[List[T]]
 
 }

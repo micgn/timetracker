@@ -13,20 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mg.tt.ui
+package de.mg.tt.ui.controller
 
 import java.util
 import java.util.Date
 
-import de.mg.tt.ui.compFilter.FilterViewModel
-
-import scala.collection.JavaConverters._
 import de.mg.holidays.HolidayAPI
 import de.mg.holidays.model.Holiday
+import de.mg.tt.ui.compFilter.FilterViewModel
 import de.mg.tt.util.DateHelper._
 import org.joda.time.LocalDate
 import org.vaadin.addons.tuningdatefield.event.{MonthChangeEvent, MonthChangeListener}
-import org.vaadin.addons.tuningdatefield.{TuningDateField, CellItemCustomizerAdapter}
+import org.vaadin.addons.tuningdatefield.{CellItemCustomizerAdapter, TuningDateField}
+
+import scala.collection.JavaConverters._
 
 /**
  * Created by gnatz on 7/26/15.

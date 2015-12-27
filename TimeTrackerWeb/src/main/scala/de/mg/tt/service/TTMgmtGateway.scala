@@ -15,16 +15,14 @@
  */
 package de.mg.tt.service
 
-import java.text.SimpleDateFormat
-import java.util.{Date, Locale}
 import javax.ejb.TransactionAttributeType._
 import javax.ejb._
 import javax.enterprise.context.SessionScoped
 import javax.inject.Inject
-import javax.interceptor.{Interceptors, Interceptor}
+import javax.interceptor.Interceptors
 
 import de.mg.tt.model.{Activity, Category, Persistent}
-import de.mg.tt.service.dao.{TTMgmtSessionDao, TTMgmtDao}
+import de.mg.tt.service.dao.TTMgmtSessionDao
 import de.mg.tt.util.DateHelper
 
 /**
@@ -49,6 +47,9 @@ class TTMgmtGateway extends TTMgmt {
 
   @Inject
   var exportFormatter: ExportFormatter = null
+
+  @Inject
+  var statisticsLogic: StatisticsLogic = null
 
   def create[T <: Persistent](entity: T)(implicit mf: Manifest[T]): T = {
     val saved = dao.create(entity)
@@ -159,6 +160,10 @@ class TTMgmtGateway extends TTMgmt {
       foreach { case (date, len) => exp += exportFormatter.toRichCsv(date, len) };
 
     exp;
+  }
+
+  def buildStatisticsCsv: String = {
+    statisticsLogic.buildStatisticsCsv
   }
 
   def resetSession(): Unit = {

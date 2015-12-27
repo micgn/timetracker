@@ -32,6 +32,8 @@ import com.vaadin.server.{FileDownloader, StreamResource, VaadinRequest}
 import com.vaadin.ui._
 import de.mg.tt.model.{Activity, Category}
 import de.mg.tt.service.{FilterCriteria, TTMgmtGateway}
+import de.mg.tt.ui.comActionMisc.{ActionMiscView, ActionMiscViewModel}
+import de.mg.tt.ui.controller.{MoneyController, DaysController}
 import de.mg.tt.ui.utils.ListenerUtils
 import ListenerUtils._
 import de.mg.tt.ui.compAction.ActionViewModel
@@ -56,6 +58,7 @@ class TTUIController extends UI {
 
   val filterVM = new FilterViewModel
   val actionVM = new ActionViewModel
+  val actionMiscVM = new ActionMiscViewModel
   val activityVM = new ActivityViewModel
   val categoryVM = new CategoryViewModel
   val moneyVM = new MoneyCalcViewModel
@@ -69,7 +72,7 @@ class TTUIController extends UI {
     layout.setupLayout
     initData
     registerListeners
-    MoneyController.registerListeners(actionVM.openMoneyCalc, moneyVM.moneyCalcBtn, moneyVM, this, service)
+    MoneyController.registerListeners(actionMiscVM.openMoneyCalc, moneyVM.moneyCalcBtn, moneyVM, this, service)
     val daysController = new DaysController(filterVM)
     daysController.init
   }
@@ -258,10 +261,16 @@ class TTUIController extends UI {
       )
     }
 
-    // register downloader at export button
-    new FileDownloader(exportStream).extend(actionVM.exportBtn)
+    // TODO create separate MiscController
 
-    new FileDownloader(exportPerDayStream).extend(actionVM.exportPerDayBtn)
+    // register downloader at export button
+    new FileDownloader(exportStream).extend(actionMiscVM.exportBtn)
+
+    new FileDownloader(exportPerDayStream).extend(actionMiscVM.exportPerDayBtn)
+
+    new FileDownloader(exportStatisticsStream).extend(actionMiscVM.exportStatisticsBtn)
+
+    listener(actionVM.openMiscBtn, ActionMiscView.openActionMiscWindow(actionMiscVM))
   }
 
   def reloadCategories = {
@@ -384,6 +393,13 @@ class TTUIController extends UI {
     service.buildPerDayExportCsv(filterCriteria)
   }
 
+  def exportStatisticsStream: StreamResource = {
+    new StreamResource(new StreamSource {
+      override def getStream: InputStream = {
+        new ByteArrayInputStream(service.buildStatisticsCsv.getBytes("UTF-8"))
+      }
+    }, "statistics.csv")
+  }
 
   def selectedCategories(tcs: TwinColSelect): Iterable[Category] =
     tcs.getValue.asInstanceOf[util.Collection[Long]].asScala.map(

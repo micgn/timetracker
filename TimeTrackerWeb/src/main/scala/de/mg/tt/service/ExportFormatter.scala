@@ -17,9 +17,8 @@ package de.mg.tt.service
 
 import java.math.RoundingMode
 import java.text.{DecimalFormat, SimpleDateFormat}
-import java.util.{Locale, Date}
+import java.util.{Date, Locale}
 import javax.ejb.Stateless
-import javax.inject.Singleton
 
 import de.mg.tt.model.Activity
 import de.mg.tt.util.DateHelper

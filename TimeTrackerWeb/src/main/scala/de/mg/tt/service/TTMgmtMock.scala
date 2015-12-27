@@ -134,6 +134,8 @@ class TTMgmtMock extends TTMgmt {
   def buildPerDayExportCsv(filterCriteria: FilterCriteria): String = ""
 
   def resetSession(): Unit = {}
+
+  def buildStatisticsCsv: String = ""
 }
 
 object TTMgmtMock {

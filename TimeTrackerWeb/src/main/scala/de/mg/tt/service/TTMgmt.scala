@@ -15,10 +15,6 @@
  */
 package de.mg.tt.service
 
-import javax.ejb.{LocalBean, Stateful}
-import javax.enterprise.context.SessionScoped
-import javax.inject.Inject
-
 import de.mg.tt.model.{Activity, Category, Persistent}
 
 /**
@@ -56,4 +52,5 @@ abstract class TTMgmt {
 
    def resetSession(): Unit
 
+   def buildStatisticsCsv: String
  }

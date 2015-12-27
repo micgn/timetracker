@@ -22,8 +22,8 @@ import javax.enterprise.context.SessionScoped
 import javax.interceptor.Interceptors
 import javax.persistence._
 
-import de.mg.tt.model.{Activity, Category, Persistent}
-import de.mg.tt.service.{FilterCriteria, ExceptionHandler}
+import de.mg.tt.model.Persistent
+import de.mg.tt.service.{ExceptionHandler, FilterCriteria}
 
 
 @SessionScoped
@@ -65,6 +65,8 @@ class TTMgmtSessionDao {
   def findAllCategories() = delegate.findAllCategories()
 
   def findActivities(criteria: FilterCriteria) = delegate.findActivities(criteria)
+
+  def findAllActivities() = delegate.findAllActivities()
 
   @TransactionAttribute(REQUIRES_NEW)
   def save() = {

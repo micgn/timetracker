@@ -13,13 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package de.mg.tt.ui
+package de.mg.tt.ui.controller
 
 import com.vaadin.ui._
-import de.mg.tt.service.{TTMgmtGateway, FilterCriteria}
+import de.mg.tt.service.TTMgmtGateway
+import de.mg.tt.ui.TTUIController
+import de.mg.tt.ui.compMoney.{MoneyCalcView, MoneyCalcViewModel}
 import de.mg.tt.ui.utils.ListenerUtils
-import ListenerUtils._
-import de.mg.tt.ui.compMoney.{MoneyCalcViewModel, MoneyCalcView}
+import de.mg.tt.ui.utils.ListenerUtils._
 import de.mg.tt.util.FloatHelper._
 
 /**

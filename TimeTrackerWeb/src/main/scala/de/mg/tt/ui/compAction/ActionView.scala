@@ -17,7 +17,7 @@ package de.mg.tt.ui.compAction
 
 import com.vaadin.data.Property.{ValueChangeEvent, ValueChangeListener}
 import com.vaadin.server.Sizeable
-import com.vaadin.ui.AbstractLayout
+import com.vaadin.ui.{MenuBar, AbstractLayout}
 import de.mg.tt.ui.utils.LayoutUtils
 import LayoutUtils._
 
@@ -99,16 +99,12 @@ object ActionView {
     btn(m.revertBtn, "revert")
     saveP.addComponent(m.revertBtn)
 
-    val exportContP = vl(border=true)
-    exportContP.setCaption("...")
-    p.addComponent(exportContP)
-    val exportP = vl(margin=false)
-    exportContP.addComponent(exportP)
-    btn(m.exportBtn, "export")
-    exportP.addComponent(m.exportBtn)
-    btn(m.exportPerDayBtn, "day export")
-    exportP.addComponent(m.exportPerDayBtn)
-    btn(m.openMoneyCalc, "calculate")
-    exportP.addComponent(m.openMoneyCalc)
+    val miscContP = vl(border=true)
+    miscContP.setCaption("misc")
+    p.addComponent(miscContP)
+    val miscP = vl(margin=false)
+    miscContP.addComponent(miscP)
+    btn(m.openMiscBtn, "...")
+    miscContP.addComponent(m.openMiscBtn)
   }
 }

@@ -29,6 +29,7 @@ import scala.collection.JavaConverters._
 
 @Entity
 @Table(name = "Activity")
+@NamedQuery(name = "findAllActivities", query = "select a from Activity a")
 class Activity(pDescription: String, pFrom: Date, pTo: Date) extends Persistent {
 
   var description: String = pDescription
