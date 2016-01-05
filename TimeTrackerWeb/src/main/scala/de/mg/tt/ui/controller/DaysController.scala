@@ -41,11 +41,11 @@ class DaysController(filterVM: FilterViewModel) {
 
   def init = {
     val now = new Date()
-    currentHolidays = holidayApi.get(year(now), month0Based(now))
+    currentHolidays = holidayApi.get(year(now), month1Based(now))
 
     {
       val y = year(mondayOfWeek)
-      val m = month0Based(mondayOfWeek) + 1
+      val m = month1Based(mondayOfWeek)
       filterVM.workingDays.setValue(String.valueOf(holidayApi.getAmountWorkingDays(y, m)))
       filterVM.passedWorkingDays.setValue(String.valueOf(holidayApi.getPassedWorkingDay(y, m)))
     }

@@ -30,6 +30,10 @@ object DateHelper {
     get(date, java.util.Calendar.MONTH)
   }
 
+  def month1Based(date: Date = new Date()) = {
+    get(date, java.util.Calendar.MONTH) + 1
+  }
+
   def weekOfYear(date: Date) = {
     get(date, java.util.Calendar.WEEK_OF_YEAR)
   }
