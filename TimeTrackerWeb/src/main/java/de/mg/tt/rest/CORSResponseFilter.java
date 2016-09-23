@@ -19,7 +19,7 @@ public class CORSResponseFilter implements Filter {
             http.addHeader("Access-Control-Allow-Origin", "*");
             http.addHeader("Access-Control-Allow-Credentials", "true");
             http.addHeader("Access-Control-Allow-Methods", "GET, POST, DELETE, PUT");
-            http.addHeader("Access-Control-Allow-Headers", "contentType, accept");
+            http.addHeader("Access-Control-Allow-Headers", "content-type, accept");
         }
         chain.doFilter(request, response);
     }
