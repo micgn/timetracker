@@ -96,6 +96,46 @@
 		<date>15.6.2017</date>
 		<desc>Fronleichnam</desc>
 	</holiday>
-	
-	
+
+	<holiday>
+		<date>30.3.2018</date>
+		<desc>Karfreitag</desc>
+	</holiday>
+	<holiday>
+		<date>2.4.2018</date>
+		<desc>Ostermontag</desc>
+	</holiday>
+	<holiday>
+		<date>10.5.2018</date>
+		<desc>Christi Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>21.5.2018</date>
+		<desc>Pfingstmontag</desc>
+	</holiday>
+	<holiday>
+		<date>31.5.2018</date>
+		<desc>Fronleichnam</desc>
+	</holiday>
+
+	<holiday>
+		<date>19.4.2019</date>
+		<desc>Karfreitag</desc>
+	</holiday>
+	<holiday>
+		<date>22.4.2019</date>
+		<desc>Ostermontag</desc>
+	</holiday>
+	<holiday>
+		<date>30.5.2019</date>
+		<desc>Christi Himmelfahrt</desc>
+	</holiday>
+	<holiday>
+		<date>10.6.2019</date>
+		<desc>Pfingstmontag</desc>
+	</holiday>
+	<holiday>
+		<date>20.6.2019</date>
+		<desc>Fronleichnam</desc>
+	</holiday>
 </HolidaysConfig>
