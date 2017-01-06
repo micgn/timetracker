@@ -15,8 +15,9 @@
  */
 package de.mg.tt.rest
 
-import java.text.{SimpleDateFormat, DateFormat}
+import java.text.{DateFormat, SimpleDateFormat}
 import java.util
+import java.util.Date
 import javax.ejb.Stateless
 import javax.inject.Inject
 import javax.ws.rs._
@@ -25,14 +26,11 @@ import de.mg.tt.api._
 import de.mg.tt.service.FilterCriteria
 import de.mg.tt.service.dao.TTMgmtDao
 import de.mg.tt.util.DateHelper._
-
 import de.mg.tt.model._
 
 import scala.collection.JavaConverters._
 
-/**
- * Created by gnatz on 5/29/15.
- */
+
 @Path("{dateStr}/")
 @Stateless
 class RestService {
@@ -65,8 +63,16 @@ class RestService {
     }
     result.setActivities(ttAs)
     result.setAvailableCategories(cats.map(cat => cat.name).asJava)
+    result.setWeekMinutes(totalMinutesInWeek(date));
     result
   }
+
+  private def totalMinutesInWeek(dayInWeek: Date): Long = {
+    val criteria = new FilterCriteria(beginOfWeek(dayInWeek), endOfWeek(dayInWeek))
+    val activities = dao.findActivities(criteria)
+    activities.map(a => a.to.getTime() - a.from.getTime()).sum / (1000 * 60)
+  }
+
 
   @POST
   @Consumes(Array("application/xml","application/json"))

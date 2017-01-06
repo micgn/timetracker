@@ -81,6 +81,27 @@ object DateHelper {
     cal.getTime
   }
 
+  def beginOfWeek(anyDayInWeek: Date) = {
+    val cal = new GregorianCalendar()
+    cal.setTime(anyDayInWeek)
+    cal.set(Calendar.HOUR_OF_DAY, 0)
+    cal.set(Calendar.MINUTE, 0)
+    cal.set(Calendar.SECOND, 0)
+    while (cal.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+      cal.add(Calendar.DATE, -1)
+    }
+    cal.getTime
+  }
+
+  def endOfWeek(anyDayInWeek: Date) = {
+    val start = beginOfWeek(anyDayInWeek);
+    val cal = new GregorianCalendar()
+    cal.setTime(start)
+    cal.add(Calendar.DATE, 7)
+    cal.getTime
+  }
+
+
   def endOfMonth(date: Date = new Date()) = {
     val cal = new GregorianCalendar()
     cal.setTime(date)

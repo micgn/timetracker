@@ -24,6 +24,7 @@ public class TTData {
 
     private List<TTActivity> activities;
     private List<String> availableCategories;
+    private Long weekMinutes;
 
     public List<TTActivity> getActivities() {
         return activities;
@@ -39,5 +40,13 @@ public class TTData {
 
     public void setAvailableCategories(List<String> availableCategories) {
         this.availableCategories = availableCategories;
+    }
+
+    public Long getWeekMinutes() {
+        return weekMinutes;
+    }
+
+    public void setWeekMinutes(Long weekMinutes) {
+        this.weekMinutes = weekMinutes;
     }
 }
