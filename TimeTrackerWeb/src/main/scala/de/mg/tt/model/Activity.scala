@@ -52,7 +52,7 @@ class Activity(pDescription: String, pFrom: Date, pTo: Date) extends Persistent 
   // make JPA happy
   def this() = this("", null, null)
 
-  def len = ((to.getTime - from.getTime) / (1000 * 60))
+  def len = to.getTime. / (1000 * 60) - from.getTime / (1000 * 60)
 
   def day = cal.get(Calendar.DAY_OF_YEAR)
   def week = {val c = cal; /*c.add(Calendar.DATE, -1);*/ c.get(Calendar.WEEK_OF_YEAR)}

@@ -331,7 +331,7 @@ class TTUIController extends UI {
         catStr = catStr.substring(1, catStr.length - 1)
         val cb = new CheckBox
 
-        val diff = (a.to.getTime - a.from.getTime) / (1000 * 60)
+        val diff = a.to.getTime / (1000 * 60) - a.from.getTime / (1000 * 60)
 
         val daySum = daySums.head;
         daySums = daySums.tail
