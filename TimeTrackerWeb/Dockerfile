@@ -11,11 +11,12 @@ RUN unzip glassfish.zip && rm glassfish.zip
 
 COPY target/timetracker.war /opt/glassfish4/glassfish/domains/domain1/autodeploy
 
+VOLUME /opt/glassfish4/glassfish/databases
+VOLUME /opt/glassfish4/glassfish/secrets
+
 ENV PATH="/opt/glassfish4/bin:${PATH}"
 
-ADD docker/pw pw
-
-CMD asadmin start-database && asadmin start-domain && asadmin create-file-user --groups TT --passwordfile pw tt && sleep infinity
+CMD asadmin start-database && asadmin start-domain && asadmin create-file-user --groups TT --passwordfile /opt/glassfish4/glassfish/secrets/passwordfile tt && tail -f /opt/glassfish4/glassfish/domains/domain1/logs/server.log
 
 EXPOSE 8080
-EXPOSE 4848
+#EXPOSE 4848

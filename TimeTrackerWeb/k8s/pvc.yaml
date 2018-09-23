@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: tt-data-pvc
+spec:
+  resources:
+    requests:
+      storage: 50M
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: standard

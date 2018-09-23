@@ -1,0 +1,4 @@
+file format "passwordfile", to be created as secret:
+AS_ADMIN_USERPASSWORD=12345
+
+kubectl create secret generic tt-user --from-file=passwordfile

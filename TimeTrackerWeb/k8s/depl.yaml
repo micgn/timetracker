@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tt
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: tt
+  template:
+    metadata:
+      name: tt
+      labels:
+        app: tt
+    spec:
+      containers:
+      - image: micgn/timetracker:v1.0
+        name: tt
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8080
+          protocol: TCP
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 120
+          periodSeconds: 30
+          timeoutSeconds: 5
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 8080
+          initialDelaySeconds: 30
+          timeoutSeconds: 5
+        volumeMounts:
+        - name: secrets
+          mountPath: /opt/glassfish4/glassfish/secrets
+          readOnly: true
+        - name: data
+          mountPath: /opt/glassfish4/glassfish/databases
+          readOnly: false
+      volumes:
+      - name: secrets
+        secret:
+          secretName: tt-user
+      - name: data
+        persistentVolumeClaim:
+          claimName: tt-data-pvc

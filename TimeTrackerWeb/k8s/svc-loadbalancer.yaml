@@ -3,7 +3,6 @@ kind: Service
 metadata:
   name: tt
 spec:
-#  type: ClusterIP
   type: LoadBalancer
   ports:
   - port: 8004

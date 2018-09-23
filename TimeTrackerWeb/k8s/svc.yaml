@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: tt
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8004
+    targetPort: 8080
+    protocol: TCP
+  selector:
+    app: tt
