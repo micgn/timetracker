@@ -1,4 +1,4 @@
-FROM ubuntu:bionic-20180821
+FROM ubuntu:bionic
 
 RUN apt-get update
 RUN apt-get install -y openjdk-8-jdk
@@ -13,6 +13,8 @@ COPY target/timetracker.war /opt/glassfish4/glassfish/domains/domain1/autodeploy
 
 VOLUME /opt/glassfish4/glassfish/databases
 VOLUME /opt/glassfish4/glassfish/secrets
+
+ENV TZ="Europe/Berlin"
 
 ENV PATH="/opt/glassfish4/bin:${PATH}"
 
