@@ -40,6 +40,9 @@ spec:
         - name: data
           mountPath: /opt/glassfish4/glassfish/databases
           readOnly: false
+        resources:
+          requests:
+            cpu: "50m"
       volumes:
       - name: secrets
         secret:
