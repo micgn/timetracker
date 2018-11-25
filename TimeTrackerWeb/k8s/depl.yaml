@@ -42,7 +42,7 @@ spec:
           readOnly: false
         resources:
           requests:
-            cpu: "50m"
+            cpu: "25m"
       volumes:
       - name: secrets
         secret:
