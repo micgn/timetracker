@@ -1,9 +1,7 @@
 <module>
-    <!-- Inherit the default widget set -->
     <inherits name="com.vaadin.terminal.gwt.DefaultWidgetSet" />
 
     <inherits name="org.vaadin.addons.tuningdatefield.widgetset.TuningDateFieldWidgetset" />
 
-    <!-- The default theme of this widget set -->
     <stylesheet src="colorpicker/styles.css"/>
 </module>
