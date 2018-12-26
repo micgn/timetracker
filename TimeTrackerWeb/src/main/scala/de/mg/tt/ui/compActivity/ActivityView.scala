@@ -18,12 +18,11 @@ package de.mg.tt.ui.compActivity
 import java.util.{Date, Locale, TimeZone}
 
 import com.vaadin.server.Sizeable
-import com.vaadin.shared.ui.datefield.Resolution._
-import com.vaadin.shared.ui.label.ContentMode
+import com.vaadin.shared.ui.ContentMode
 import com.vaadin.ui.{Button, FormLayout, Label, UI}
-import de.mg.tt.ui.utils.{ListenerUtils, LayoutUtils}
-import LayoutUtils._
-import ListenerUtils._
+import com.vaadin.v7.shared.ui.datefield.Resolution
+import de.mg.tt.ui.utils.LayoutUtils._
+import de.mg.tt.ui.utils.ListenerUtils._
 
 /**
  * Created by gnatz on 7/26/15.
@@ -47,17 +46,17 @@ object ActivityView {
     m.activityW.setContent(layout)
 
     m.actFrom.setCaption("from")
-    m.actFrom.setResolution(MINUTE)
+    m.actFrom.setResolution(Resolution.MINUTE)
     m.actFrom.setTimeZone(TimeZone.getTimeZone(TZ))
     m.actFrom.setLocale(Locale.GERMANY)
     m.actFrom.setDateFormat(df)
     layout.addComponent(m.actFrom)
-    listener[Date](m.actFrom, d => {
+    listenerField[Date](m.actFrom, d => {
       m.actTo.setValue(d)
     })
 
     m.actTo.setCaption("to")
-    m.actTo.setResolution(MINUTE)
+    m.actTo.setResolution(Resolution.MINUTE)
     m.actTo.setTimeZone(TimeZone.getTimeZone(TZ))
     m.actTo.setLocale(Locale.GERMANY)
     m.actTo.setDateFormat(df)
@@ -92,7 +91,7 @@ object ActivityView {
     val cancel = new Button
     btn(cancel, "Cancel")
     btns.addComponent(cancel)
-    listener(cancel, {
+    listenerBtn(cancel, {
       m.activityW.close()
     })
 

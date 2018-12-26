@@ -12,9 +12,8 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <encoding>UTF-8</encoding>
         <scala.version>2.12.8</scala.version>
-        <vaadin.version>7.3.7</vaadin.version>
-        <vaadin.plugin.version>7.7.16</vaadin.plugin.version>
-        <jetty.plugin.version>9.2.3.v20140905</jetty.plugin.version>
+        <vaadin.version>8.6.3</vaadin.version>
+        <vaadin.plugin.version>12.0.3</vaadin.plugin.version>
     </properties>
 
     <developers>
@@ -91,7 +90,7 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-server</artifactId>
+            <artifactId>vaadin-compatibility-server</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>
@@ -101,17 +100,22 @@
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-themes</artifactId>
+            <artifactId>vaadin-compatibility-themes</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client-compiled</artifactId>
+            <artifactId>vaadin-compatibility-client-compiled</artifactId>
             <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>com.vaadin</groupId>
-            <artifactId>vaadin-client</artifactId>
+            <artifactId>vaadin-compatibility-shared</artifactId>
+            <version>${vaadin.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-compatibility-client</artifactId>
             <version>${vaadin.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -124,7 +128,7 @@
         <dependency>
             <groupId>org.vaadin.addons</groupId>
             <artifactId>tuning-datefield</artifactId>
-            <version>0.15.0</version>
+            <version>0.19.0-vaadin8</version>
         </dependency>
 
 
@@ -247,18 +251,7 @@
             <plugin>
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
-                <version>${vaadin.plugin.version}</version>
-                <configuration>
-                    <extraJvmArgs>-Xmx512M -Xss1024k</extraJvmArgs>
-                    <!-- We are doing "inplace" but into subdir VAADIN/widgetsets. This
-                    way compatible with Vaadin eclipse plugin. -->
-                    <webappDirectory>${basedir}/src/main/webapp/VAADIN/widgetsets</webappDirectory>
-                    <hostedWebapp>${basedir}/src/main/webapp/VAADIN/widgetsets</hostedWebapp>
-                    <noServer>true</noServer>
-                    <draftCompile>false</draftCompile>
-                    <compileReport>true</compileReport>
-                    <style>OBF</style>
-                </configuration>
+                <version>8.6.3</version>
                 <executions>
                     <execution>
                         <goals>
@@ -271,6 +264,7 @@
                     </execution>
                 </executions>
             </plugin>
+
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

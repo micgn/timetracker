@@ -16,22 +16,21 @@
 package de.mg.tt.ui
 
 import com.vaadin.server.Sizeable.Unit._
-import com.vaadin.shared.ui.label.ContentMode
+import com.vaadin.shared.ui.ContentMode
 import com.vaadin.ui._
-import de.mg.tt.ui.utils.{ListenerUtils, LayoutUtils}
-import LayoutUtils._
-import ListenerUtils._
 import de.mg.tt.ui.compAction.{ActionView, ActionViewModel}
 import de.mg.tt.ui.compFilter.{FilterView, FilterViewModel}
+import de.mg.tt.ui.utils.LayoutUtils._
+import de.mg.tt.ui.utils.ListenerUtils._
 
 /**
- * Created by gnatz on 12/28/14.
- */
+  * Created by gnatz on 12/28/14.
+  */
 class TTLayout(ui: TTUIController, filterVM: FilterViewModel, actionVM: ActionViewModel) {
 
   val TZ = "Europe/Berlin"
 
-  def setupLayout() = {
+  def setupLayout(): Unit = {
 
     val split1 = new HorizontalSplitPanel
     split1.setSizeFull()
@@ -44,10 +43,10 @@ class TTLayout(ui: TTUIController, filterVM: FilterViewModel, actionVM: ActionVi
     val filterPanelLayout = vl()
     FilterView.setup(filterVM, filterPanelLayout)
 
-    val actionsPanelLayout = hl(margin=false)
+    val actionsPanelLayout = hl(margin = false)
     ActionView.setup(actionVM, actionsPanelLayout)
 
-    val tablePanelLayout = vl(margin=false, spacing=false)
+    val tablePanelLayout = vl(margin = false, spacing = false)
     tablePanelLayout.setSizeFull()
     setupTablePanel(tablePanelLayout)
 
@@ -59,7 +58,7 @@ class TTLayout(ui: TTUIController, filterVM: FilterViewModel, actionVM: ActionVi
     ui.setContent(split1)
   }
 
-  private def setupTablePanel(p: AbstractLayout) = {
+  private def setupTablePanel(p: AbstractLayout): Unit = {
 
     ui.table.setSelectable(false)
     ui.table.setSizeFull()
@@ -70,7 +69,7 @@ class TTLayout(ui: TTUIController, filterVM: FilterViewModel, actionVM: ActionVi
 
 object TTLayout {
 
-  def question(q: String, execIfYes: => Unit) = {
+  def question(q: String, execIfYes: => Unit): Unit = {
     val w = new Window()
     w.setCaption(q)
     w.setModal(true)
@@ -90,19 +89,19 @@ object TTLayout {
 
     w.setContent(btns)
 
-    listener(yes, {
+    listenerBtn(yes, {
       execIfYes
       w.close()
     })
 
-    listener(no, {
+    listenerBtn(no, {
       w.close()
     })
 
     UI.getCurrent.addWindow(w)
   }
 
-  def tableDayLabel(str: String, newWeek: Boolean, newDay: Boolean) =
+  def tableDayLabel(str: String, newWeek: Boolean, newDay: Boolean): Label =
     if (newWeek) new Label("<strong>" + str + "</strong>", ContentMode.HTML)
     else if (!newDay) new Label("<i>" + str + "</i>", ContentMode.HTML)
     else new Label(str, ContentMode.HTML)

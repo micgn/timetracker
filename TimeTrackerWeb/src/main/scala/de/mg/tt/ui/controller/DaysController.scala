@@ -15,28 +15,29 @@
  */
 package de.mg.tt.ui.controller
 
+import java.time.LocalDate
 import java.util
 import java.util.Date
 
 import de.mg.holidays.HolidayAPI
 import de.mg.holidays.model.Holiday
 import de.mg.tt.ui.compFilter.FilterViewModel
+import de.mg.tt.ui.utils.DateUtils
 import de.mg.tt.util.DateHelper._
-import org.joda.time.LocalDate
-import org.vaadin.addons.tuningdatefield.event.{MonthChangeEvent, MonthChangeListener}
+import org.vaadin.addons.tuningdatefield.event.MonthChangeEvent
 import org.vaadin.addons.tuningdatefield.{CellItemCustomizerAdapter, TuningDateField}
 
 import scala.collection.JavaConverters._
 
 /**
- * Created by gnatz on 7/26/15.
- */
+  * Created by gnatz on 7/26/15.
+  */
 class DaysController(filterVM: FilterViewModel) {
 
   private val holidayApi = new HolidayAPI
 
   // cache
-  private var currentHolidays: util.List[Holiday] = null
+  private var currentHolidays: util.List[Holiday] = _
 
 
   def init = {
@@ -53,28 +54,26 @@ class DaysController(filterVM: FilterViewModel) {
     filterVM.filterFrom.setCellItemCustomizer(new MyCellItemCustomizer)
     class MyCellItemCustomizer extends CellItemCustomizerAdapter {
       override def getTooltip(date: LocalDate, tuningDateField: TuningDateField): String = {
-        val ho = getHoliday(date.toDateTimeAtStartOfDay.toDate)
+        val ho = getHoliday(DateUtils.toDate(date.atStartOfDay()))
         if (ho.nonEmpty) ho.get.description else ""
       }
 
       override def getStyle(date: LocalDate, tuningDateField: TuningDateField): String = {
-        if (getHoliday(date.toDateTimeAtStartOfDay.toDate).nonEmpty)
+        if (getHoliday(DateUtils.toDate(date.atStartOfDay())).nonEmpty)
           "holiday"
         else
           null
       }
     }
 
-    filterVM.filterFrom.addMonthChangeListener(new MonthChangeListener() {
-      override def monthChange(monthChangeEvent: MonthChangeEvent): Unit = {
-        val selected = monthChangeEvent.getYearMonth
-        val selectedYear = selected.getYear
-        val selectedMonth = selected.getMonthOfYear
-        filterVM.workingDays.setValue(String.valueOf(holidayApi.getAmountWorkingDays(selectedYear, selectedMonth)))
-        filterVM.passedWorkingDays.setValue(String.valueOf(holidayApi.getPassedWorkingDay(selectedYear, selectedMonth)))
-        // initialize cache
-        currentHolidays = holidayApi.get(selectedYear, selectedMonth)
-      }
+    filterVM.filterFrom.addMonthChangeListener((monthChangeEvent: MonthChangeEvent) => {
+      val selected = monthChangeEvent.getYearMonth
+      val selectedYear = selected.getYear
+      val selectedMonth = selected.getMonthValue
+      filterVM.workingDays.setValue(String.valueOf(holidayApi.getAmountWorkingDays(selectedYear, selectedMonth)))
+      filterVM.passedWorkingDays.setValue(String.valueOf(holidayApi.getPassedWorkingDay(selectedYear, selectedMonth)))
+      // initialize cache
+      currentHolidays = holidayApi.get(selectedYear, selectedMonth)
     })
   }
 

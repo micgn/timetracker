@@ -15,11 +15,11 @@
  */
 package de.mg.tt.ui.controller
 
+import com.vaadin.shared.Registration
 import com.vaadin.ui._
 import de.mg.tt.service.TTMgmtGateway
 import de.mg.tt.ui.TTUIController
 import de.mg.tt.ui.compMoney.{MoneyCalcView, MoneyCalcViewModel}
-import de.mg.tt.ui.utils.ListenerUtils
 import de.mg.tt.ui.utils.ListenerUtils._
 import de.mg.tt.util.FloatHelper._
 
@@ -29,17 +29,17 @@ import de.mg.tt.util.FloatHelper._
 object MoneyController {
 
   def registerListeners(openBtn: Button, calcBtn: Button, moneyVM: MoneyCalcViewModel,
-                        controller: TTUIController, service: TTMgmtGateway) = {
+                        controller: TTUIController, service: TTMgmtGateway): Registration = {
 
-    listener(openBtn, {
+    listenerBtn(openBtn, {
       val activities = service.findActivities(controller.filterCriteria)
-      if (activities.size > 0) {
-        val hours = activities.map(a => a.len).reduce((l1, l2) => l1 + l2) / 60.0
+      if (activities.nonEmpty) {
+        val hours = activities.map(a => a.len).sum / 60.0
         MoneyCalcView.openMoneyCalcWindow(moneyVM, hours.toFloat)
       }
     })
 
-    listener(calcBtn, {
+    listenerBtn(calcBtn, {
       val rateF = toFloat(moneyVM.rate.getValue)
       val hoursF = toFloat(moneyVM.moneyHours.getValue)
       val taxF = 0.19 * rateF * hoursF

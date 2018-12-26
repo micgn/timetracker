@@ -16,45 +16,44 @@
 package de.mg.tt.ui
 
 /**
- * Created by gnatz on 12/27/14.
- */
+  * Created by gnatz on 12/27/14.
+  */
 
 import java.io.{ByteArrayInputStream, InputStream}
 import java.text.SimpleDateFormat
 import java.util
 import java.util.{Date, Locale}
-import javax.inject.Inject
 
-import com.vaadin.annotations.{Theme, Widgetset}
+import com.vaadin.annotations.Widgetset
 import com.vaadin.cdi.CDIUI
 import com.vaadin.server.StreamResource.StreamSource
 import com.vaadin.server.{FileDownloader, StreamResource, VaadinRequest}
-import com.vaadin.ui._
+import com.vaadin.shared.Registration
+import com.vaadin.ui.{Notification, UI}
+import com.vaadin.v7.ui.{CheckBox, Label, Table, TwinColSelect}
 import de.mg.tt.model.{Activity, Category}
 import de.mg.tt.service.{FilterCriteria, TTMgmtGateway}
 import de.mg.tt.ui.comActionMisc.{ActionMiscView, ActionMiscViewModel}
-import de.mg.tt.ui.controller.{MoneyController, DaysController}
-import de.mg.tt.ui.utils.ListenerUtils
-import ListenerUtils._
 import de.mg.tt.ui.compAction.ActionViewModel
 import de.mg.tt.ui.compActivity.{ActivityView, ActivityViewModel}
 import de.mg.tt.ui.compCategory.{CategoryView, CategoryViewModel}
 import de.mg.tt.ui.compFilter.FilterViewModel
 import de.mg.tt.ui.compMoney.MoneyCalcViewModel
+import de.mg.tt.ui.controller.{DaysController, MoneyController}
+import de.mg.tt.ui.utils.DateUtils
+import de.mg.tt.ui.utils.ListenerUtils._
 import de.mg.tt.util.DateHelper._
-import org.joda.time.LocalDate
+import javax.inject.Inject
 
 import scala.collection.JavaConverters._
 
 @CDIUI("")
 @Widgetset("TTWidgetset")
-@Theme("tttheme")
+//@Theme("tttheme")
 class TTUIController extends UI {
 
   @Inject
-  private var service: TTMgmtGateway = null
-
-  //val service: TTMgmt = TTMgmtMock.instance
+  private var service: TTMgmtGateway = _
 
   val filterVM = new FilterViewModel
   val actionVM = new ActionViewModel
@@ -65,26 +64,26 @@ class TTUIController extends UI {
 
   val table = new Table
   var activity4Update: Option[Activity] = None
-  var filterCriteria: FilterCriteria = null
+  var filterCriteria: FilterCriteria = _
 
   override def init(r: VaadinRequest): Unit = {
     val layout = new TTLayout(this, filterVM, actionVM)
-    layout.setupLayout
-    initData
+    layout.setupLayout()
+    initData()
     registerListeners
     MoneyController.registerListeners(actionMiscVM.openMoneyCalc, moneyVM.moneyCalcBtn, moneyVM, this, service)
     val daysController = new DaysController(filterVM)
     daysController.init
   }
 
-  def initData = {
-    filterVM.filterFrom.setLocalDate(LocalDate.fromDateFields(mondayOfWeek))
+  def initData(): Unit = {
+    filterVM.filterFrom.setLocalDate(DateUtils.toLocalDate(mondayOfWeek))
     filterVM.filterTo.setValue(endOfMonth())
 
-    reloadCategories
+    reloadCategories()
     val cats = service.lastFilteredCategories()
     cats.foreach(c => filterVM.filterCat.select(c.id))
-    filterCriteria = new FilterCriteria(mondayOfWeek, endOfMonth(), cats)
+    filterCriteria = FilterCriteria(mondayOfWeek, endOfMonth(), cats)
 
     table.addContainerProperty("select", classOf[CheckBox], false)
     table.addContainerProperty("w", classOf[String], false)
@@ -99,27 +98,27 @@ class TTUIController extends UI {
     table.addContainerProperty("month", classOf[String], null)
     table.addContainerProperty("year", classOf[String], null)
 
-    reloadTable
+    reloadTable()
   }
 
-  def registerListeners = {
+  def registerListeners: Registration = {
 
-    globalListenerMethods = List(() => saveRevertEnabler)
-    saveRevertEnabler
+    globalListenerMethods = List(() => saveRevertEnabler())
+    saveRevertEnabler()
 
-    def saveRevertEnabler = {
+    def saveRevertEnabler() = {
       val changes = service.hasChanges
       actionVM.saveBtn.setEnabled(changes)
       actionVM.revertBtn.setEnabled(changes)
     }
 
-    listener(actionVM.newBtn, {
+    listenerBtn(actionVM.newBtn, {
       activity4Update = None
       activityVM.actFrom.setValue(new Date)
       activityVM.actTo.setValue(new Date)
       activityVM.actDescr.setValue("")
       activityVM.actLongDescr.setValue("")
-      initWindowCategories
+      initWindowCategories()
       activityVM.actCats.setValue(null)
       selectedCategories(filterVM.filterCat).foreach(c => activityVM.actCats.select(c.id))
       ActivityView.openActivityWindow(activityVM)
@@ -133,19 +132,19 @@ class TTUIController extends UI {
       activityVM.actTo.setValue(act.to)
       activityVM.actDescr.setValue(act.description)
       activityVM.actLongDescr.setValue(if (act.longDescription != null) act.longDescription else "")
-      initWindowCategories
+      initWindowCategories()
       activityVM.actCats.setValue(act.categories.asScala.map(c => c.id).seq.asJava)
       ActivityView.openActivityWindow(activityVM)
     })
 
-    def initWindowCategories = {
+    def initWindowCategories(): Unit = {
       service.findAllCategories().foreach(c => {
         activityVM.actCats.addItem(c.id)
         activityVM.actCats.setItemCaption(c.id, c.name)
       })
     }
 
-    listener(activityVM.actAddBtn, {
+    listenerBtn(activityVM.actAddBtn, {
       if (activityVM.actFrom.getValue == null || activityVM.actTo.getValue == null ||
         activityVM.actFrom.getValue.after(activityVM.actTo.getValue)) {
         Notification.show("Activity invalid", Notification.Type.WARNING_MESSAGE)
@@ -160,51 +159,52 @@ class TTUIController extends UI {
         if (activity4Update.isEmpty) service.create(a)
         activityVM.activityW.close()
         Notification.show("Activity saved", Notification.Type.TRAY_NOTIFICATION)
-        reloadTable
+        reloadTable()
       }
     })
 
-    listener(activityVM.actAddSaveBtn, {
-      activityVM.actAddBtn.click(); actionVM.saveBtn.click()
+    listenerBtn(activityVM.actAddSaveBtn, {
+      activityVM.actAddBtn.click();
+      actionVM.saveBtn.click()
     })
 
-    listener(actionVM.newCatBtn, {
+    listenerBtn(actionVM.newCatBtn, {
       categoryVM.catName.setValue("")
       CategoryView.openCategoryWindow(categoryVM)
     })
 
-    listener(categoryVM.catSaveBtn,
+    listenerBtn(categoryVM.catSaveBtn,
       if (categoryVM.catName.getValue.length > 0) {
         service.create(new Category(categoryVM.catName.getValue))
         categoryVM.categoryW.close()
-        reloadCategories
+        reloadCategories()
         Notification.show("Category saved", Notification.Type.TRAY_NOTIFICATION)
       })
 
-    listener(actionVM.deleteBtn, needsSelection({
+    listenerBtn(actionVM.deleteBtn, needsSelection({
       selectedActivities.foreach(aId => service.deleteActivity(aId))
       reloadTable
       Notification.show("deleted", Notification.Type.TRAY_NOTIFICATION)
     }))
 
-    listener(actionVM.addCatBtn, needsSelection({
+    listenerBtn(actionVM.addCatBtn, needsSelection({
       selectedActivities.foreach(aId => {
         val act = service.get[Activity](aId)
         val cId = actionVM.catChooser.getValue.asInstanceOf[Long]
         val cat = service.get[Category](cId)
         act.categories.add(cat)
-        reloadTable
+        reloadTable()
       })
       actionVM.catChooser.setValue(null)
       actionVM.addCatBtn.setEnabled(false)
       Notification.show("added", Notification.Type.TRAY_NOTIFICATION)
     }))
 
-    listener(actionVM.delCatBtn, {
+    listenerBtn(actionVM.delCatBtn, {
       val cId = actionVM.delCatChooser.getValue.asInstanceOf[Long]
       service.deleteCategory(cId)
-      reloadCategories
-      reloadTable
+      reloadCategories()
+      reloadTable()
       Notification.show("Category deleted", Notification.Type.TRAY_NOTIFICATION)
     })
 
@@ -213,15 +213,15 @@ class TTUIController extends UI {
         Notification.show("nothing selected", Notification.Type.WARNING_MESSAGE)
       else toExecute
 
-    listener(actionVM.saveBtn, {
+    listenerBtn(actionVM.saveBtn, {
       service.save()
       Notification.show("saved", Notification.Type.TRAY_NOTIFICATION)
     })
 
-    listener(actionVM.revertBtn, {
+    listenerBtn(actionVM.revertBtn, {
       TTLayout.question("really revert?", {
         service.revert()
-        initData
+        initData()
         Notification.show("reverted", Notification.Type.TRAY_NOTIFICATION)
       })
     })
@@ -230,29 +230,32 @@ class TTUIController extends UI {
       if (dFrom.after(filterVM.filterTo.getValue)) filterVM.filterTo.setValue(endOfMonth(dFrom))
     })
 
-    listener(filterVM.filterBtn, {
-      filterCriteria = new FilterCriteria(
-        dayStart(filterVM.filterFrom.getLocalDate.toDate),
+    listenerBtn(filterVM.filterBtn, {
+      filterCriteria = FilterCriteria(
+        dayStart(DateUtils.toDate(filterVM.filterFrom.getLocalDate)),
         dayEnd(filterVM.filterTo.getValue),
         selectedCategories(filterVM.filterCat).toSet)
-      reloadTable
+      reloadTable()
     })
 
-    listener(filterVM.resetSessionBtn, {
+    listenerBtn(filterVM.resetSessionBtn, {
       if (service.dataAndFilterChanged(filterCriteria))
         TTLayout.question("Revert all changes?", {
-          service.resetSession; reloadTable
+          service.resetSession()
+          reloadTable()
         })
       else {
-        service.resetSession; reloadTable
+        service.resetSession()
+        reloadTable()
       }
     })
 
     // table item selection
-    listener(actionVM.allBtn, selectFunc(cb => cb.setValue(true)))
-    listener(actionVM.noneBtn, selectFunc(cb => cb.setValue(false)))
-    listener(actionVM.invertBtn, selectFunc(cb => cb.setValue(!cb.getValue)))
-    def selectFunc(change: CheckBox => Unit) = {
+    listenerBtn(actionVM.allBtn, selectFunc(cb => cb.setValue(true)))
+    listenerBtn(actionVM.noneBtn, selectFunc(cb => cb.setValue(false)))
+    listenerBtn(actionVM.invertBtn, selectFunc(cb => cb.setValue(!cb.getValue)))
+
+    def selectFunc(change: CheckBox => Unit): Unit = {
       table.getItemIds.toArray.foreach(
         aId => {
           val cb = table.getItem(aId).getItemProperty("select").getValue.asInstanceOf[CheckBox]
@@ -270,10 +273,10 @@ class TTUIController extends UI {
 
     new FileDownloader(exportStatisticsStream).extend(actionMiscVM.exportStatisticsBtn)
 
-    listener(actionVM.openMiscBtn, ActionMiscView.openActionMiscWindow(actionMiscVM))
+    listenerBtn(actionVM.openMiscBtn, ActionMiscView.openActionMiscWindow(actionMiscVM))
   }
 
-  def reloadCategories = {
+  def reloadCategories(): Unit = {
     filterVM.filterCat.removeAllItems()
     actionVM.catChooser.removeAllItems()
     actionVM.delCatChooser.removeAllItems()
@@ -288,7 +291,7 @@ class TTUIController extends UI {
     })
   }
 
-  def reloadTable = {
+  def reloadTable(): Unit = {
 
     if (service.dataAndFilterChanged(filterCriteria))
       TTLayout.question("Revert all changes?", doReload)
@@ -310,12 +313,13 @@ class TTUIController extends UI {
       }
     }
 
-    def doReload = {
+    def doReload(): Unit = {
       val df = new SimpleDateFormat("EE dd.MM.yy", Locale.GERMANY)
       val tf = new SimpleDateFormat("HH:mm", Locale.GERMANY)
+
       def toTime(d: Date) = tf.format(getRightTimeDueToVaadinBug(d))
 
-      table.removeAllItems
+      table.removeAllItems()
 
       val activities = service.findActivities(filterCriteria)
 
@@ -333,13 +337,13 @@ class TTUIController extends UI {
 
         val diff = a.to.getTime / (1000 * 60) - a.from.getTime / (1000 * 60)
 
-        val daySum = daySums.head;
+        val daySum = daySums.head
         daySums = daySums.tail
-        val weekSum = weekSums.head;
+        val weekSum = weekSums.head
         weekSums = weekSums.tail
-        val monthSum = monthSums.head;
+        val monthSum = monthSums.head
         monthSums = monthSums.tail
-        val yearSum = yearSums.head;
+        val yearSum = yearSums.head
         yearSums = yearSums.tail
 
         val newDay = prevDay != a.day
@@ -347,7 +351,7 @@ class TTUIController extends UI {
         val newWeek = prevWeek != a.week
         prevWeek = a.week
 
-        val weekInYear = if (newWeek) a.week.toString else "";
+        val weekInYear = if (newWeek) a.week.toString else ""
 
         table.addItem(Array[Object](
           cb,
@@ -376,7 +380,7 @@ class TTUIController extends UI {
   }
 
   def export: String = {
-    reloadTable
+    reloadTable()
     service.buildExportCsv(filterCriteria)
   }
 
@@ -389,7 +393,7 @@ class TTUIController extends UI {
   }
 
   def exportPerDay: String = {
-    reloadTable
+    reloadTable()
     service.buildPerDayExportCsv(filterCriteria)
   }
 

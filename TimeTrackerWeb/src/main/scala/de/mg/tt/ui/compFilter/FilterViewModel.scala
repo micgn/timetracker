@@ -15,12 +15,13 @@
  */
 package de.mg.tt.ui.compFilter
 
-import com.vaadin.ui.{Button, PopupDateField, TextField, TwinColSelect}
+import com.vaadin.ui.Button
+import com.vaadin.v7.ui.{PopupDateField, TextField, TwinColSelect}
 import org.vaadin.addons.tuningdatefield.InlineTuningDateField
 
 /**
- * Created by gnatz on 7/26/15.
- */
+  * Created by gnatz on 7/26/15.
+  */
 class FilterViewModel {
   val filterFrom = new InlineTuningDateField
   val workingDays = new TextField

@@ -19,13 +19,13 @@ import com.vaadin.server.Sizeable
 import com.vaadin.ui.{Button, HorizontalLayout, VerticalLayout}
 
 /**
- * Created by gnatz on 12/28/14.
- */
+  * Created by gnatz on 12/28/14.
+  */
 object LayoutUtils {
 
   val TZ = "Europe/Berlin"
 
-  def vl(margin:Boolean=true, spacing:Boolean=true, border:Boolean=false) = {
+  def vl(margin: Boolean = true, spacing: Boolean = true, border: Boolean = false): VerticalLayout = {
     val l = new VerticalLayout
     l.setSpacing(spacing)
     l.setMargin(margin)
@@ -33,7 +33,7 @@ object LayoutUtils {
     l
   }
 
-  def hl(margin:Boolean=true, spacing:Boolean=true, border:Boolean=false) = {
+  def hl(margin: Boolean = true, spacing: Boolean = true, border: Boolean = false): HorizontalLayout = {
     val l = new HorizontalLayout
     l.setSpacing(spacing)
     l.setMargin(margin)
@@ -41,7 +41,7 @@ object LayoutUtils {
     l
   }
 
-  def btn(b: Button, title: String, important:Boolean=false, small:Boolean=false) = {
+  def btn(b: Button, title: String, important: Boolean = false, small: Boolean = false): Unit = {
     if (!small)
       b.setWidth(10, Sizeable.Unit.EM)
     else {

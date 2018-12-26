@@ -15,7 +15,8 @@
  */
 package de.mg.tt.ui.compAction
 
-import com.vaadin.ui.{Button, NativeSelect}
+import com.vaadin.ui.Button
+import com.vaadin.v7.ui.NativeSelect
 
 /**
  * Created by gnatz on 7/26/15.

@@ -18,12 +18,11 @@ package de.mg.tt.ui.compFilter
 import java.util.{Locale, TimeZone}
 
 import com.vaadin.server.Sizeable
-import com.vaadin.shared.ui.datefield.Resolution._
-import com.vaadin.shared.ui.label.ContentMode
+import com.vaadin.shared.ui.ContentMode
 import com.vaadin.ui.{AbstractLayout, Label}
+import com.vaadin.v7.shared.ui.datefield.Resolution
 import de.mg.tt.ui.utils.LayoutUtils
-import LayoutUtils._
-import de.mg.tt.ui.utils.LayoutUtils
+import de.mg.tt.ui.utils.LayoutUtils._
 import org.vaadin.addons.tuningdatefield.widgetset.client.ui.calendar.CalendarResolution
 
 /**
@@ -38,7 +37,6 @@ object FilterView {
 
     m.filterFrom.setCaption("from")
     m.filterFrom.setCalendarResolution(CalendarResolution.DAY)
-    m.filterFrom.setImmediate(true)
     m.filterFrom.setLocale(Locale.ENGLISH)
     m.filterFrom.setWeekendDisabled(false)
     m.filterFrom.setDisplayFixedNumberOfDayRows(true)
@@ -60,7 +58,7 @@ object FilterView {
     daysP.addComponent(m.passedWorkingDays)
 
     m.filterTo.setCaption("to")
-    m.filterTo.setResolution(DAY)
+    m.filterTo.setResolution(Resolution.DAY)
     m.filterTo.setImmediate(true)
     m.filterTo.setTimeZone(TimeZone.getTimeZone(LayoutUtils.TZ))
     m.filterTo.setLocale(Locale.ENGLISH)

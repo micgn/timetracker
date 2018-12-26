@@ -17,54 +17,47 @@ package de.mg.tt.ui.utils
 
 import java.util.Date
 
-import com.vaadin.data.Property.{ValueChangeEvent, ValueChangeListener}
-import com.vaadin.event.ItemClickEvent
-import com.vaadin.event.ItemClickEvent.ItemClickListener
-import com.vaadin.ui.Button.{ClickEvent, ClickListener}
-import com.vaadin.ui._
+import com.vaadin.shared.Registration
+import com.vaadin.ui.Button
+import com.vaadin.ui.Button.ClickEvent
+import com.vaadin.v7.data.Property.ValueChangeEvent
+import com.vaadin.v7.event.ItemClickEvent
+import com.vaadin.v7.ui.{AbstractField, Table}
 import org.vaadin.addons.tuningdatefield.TuningDateField
-import org.vaadin.addons.tuningdatefield.event.{DateChangeEvent, DateChangeListener}
+import org.vaadin.addons.tuningdatefield.event.DateChangeEvent
 
 /**
- * Created by gnatz on 12/28/14.
- */
+  * Created by gnatz on 12/28/14.
+  */
 object ListenerUtils {
 
   var globalListenerMethods: List[() => Unit] = Nil
 
-  def listener[PROPERTY](field: AbstractField[PROPERTY], valueChangeFunction: PROPERTY => Unit) = {
-    field.addValueChangeListener(new ValueChangeListener {
-      override def valueChange(valueChangeEvent: ValueChangeEvent): Unit = {
-        valueChangeFunction(valueChangeEvent.getProperty.getValue.asInstanceOf[PROPERTY])
-        globalListenerMethods.foreach(method => method())
-      }
+  def listenerField[PROPERTY](field: AbstractField[PROPERTY], valueChangeFunction: PROPERTY => Unit): Unit = {
+    field.addValueChangeListener((valueChangeEvent: ValueChangeEvent) => {
+      valueChangeFunction(valueChangeEvent.getProperty.getValue.asInstanceOf[PROPERTY])
+      globalListenerMethods.foreach(method => method())
     })
   }
 
-  def listener(btn: Button, clickFunction: => Unit) = {
-    btn.addClickListener(new ClickListener {
-      override def buttonClick(clickEvent: ClickEvent): Unit = {
-        clickFunction
-        globalListenerMethods.foreach(method => method())
-      }
+  def listenerBtn(btn: Button, clickFunction: => Unit): Registration = {
+    btn.addClickListener((_: ClickEvent) => {
+      clickFunction
+      globalListenerMethods.foreach(method => method())
     })
   }
 
-  def tableListener(t: Table, clickFunction: Long => Unit) = {
-    t.addItemClickListener(new ItemClickListener {
-      override def itemClick(itemClickEvent: ItemClickEvent): Unit = {
-        clickFunction(itemClickEvent.getItemId.asInstanceOf[Long])
-        globalListenerMethods.foreach(method => method())
-      }
+  def tableListener(t: Table, clickFunction: Long => Unit): Unit = {
+    t.addItemClickListener((itemClickEvent: ItemClickEvent) => {
+      clickFunction(itemClickEvent.getItemId.asInstanceOf[Long])
+      globalListenerMethods.foreach(method => method())
     })
   }
 
-  def dateFieldListener(d: TuningDateField, valueChangeFunction: Date => Unit) = {
-    d.addDateChangeListener(new DateChangeListener {
-      override def dateChange(dateChangeEvent: DateChangeEvent): Unit = {
-        valueChangeFunction(dateChangeEvent.getLocalDate().toDate)
-        globalListenerMethods.foreach(method => method())
-      }
+  def dateFieldListener(d: TuningDateField, valueChangeFunction: Date => Unit): Unit = {
+    d.addDateChangeListener((dateChangeEvent: DateChangeEvent) => {
+      valueChangeFunction(DateUtils.toDate(dateChangeEvent.getLocalDate))
+      globalListenerMethods.foreach(method => method())
     })
   }
 

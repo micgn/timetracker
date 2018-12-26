@@ -15,11 +15,13 @@
  */
 package de.mg.tt.ui.compActivity
 
-import com.vaadin.ui._
+import com.vaadin.ui.{Button, Window}
+import com.vaadin.v7.ui.{DateField, TextArea, TextField, TwinColSelect}
+
 
 /**
- * Created by gnatz on 7/26/15.
- */
+  * Created by gnatz on 7/26/15.
+  */
 class ActivityViewModel {
   val activityW = new Window
   val actAddBtn = new Button
