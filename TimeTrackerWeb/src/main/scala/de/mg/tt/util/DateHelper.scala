@@ -15,34 +15,34 @@
  */
 package de.mg.tt.util
 
-import java.util.{Calendar, GregorianCalendar, Date}
+import java.util.{Calendar, Date, GregorianCalendar}
 
 /**
  * Created by gnatz on 1/6/15.
  */
 object DateHelper {
 
-  def dayOfMonth(date: Date = new Date()) = {
+  def dayOfMonth(date: Date = new Date()): Int = {
     get(date, java.util.Calendar.DAY_OF_MONTH)
   }
 
-  def month0Based(date: Date = new Date()) = {
+  def month0Based(date: Date = new Date()): Int = {
     get(date, java.util.Calendar.MONTH)
   }
 
-  def month1Based(date: Date = new Date()) = {
+  def month1Based(date: Date = new Date()): Int = {
     get(date, java.util.Calendar.MONTH) + 1
   }
 
-  def weekOfYear(date: Date) = {
+  def weekOfYear(date: Date): Int = {
     get(date, java.util.Calendar.WEEK_OF_YEAR)
   }
 
-  def year(date: Date = new Date()) = {
+  def year(date: Date = new Date()): Int = {
     get(date, java.util.Calendar.YEAR)
   }
 
-  def isSameDay(d1: Date, d2: Date) =
+  def isSameDay(d1: Date, d2: Date): Boolean =
     year(d1)==year(d2) && month0Based(d1) == month0Based(d2) && dayOfMonth(d1) == dayOfMonth(d2)
 
   private def get(date: Date, x: Int) = {
@@ -70,7 +70,7 @@ object DateHelper {
     cal.getTime
   }
 
-  def mondayOfWeek = {
+  def mondayOfWeek: Date = {
     val cal = new GregorianCalendar()
     cal.set(Calendar.HOUR_OF_DAY, 0)
     cal.set(Calendar.MINUTE, 0)
@@ -81,7 +81,7 @@ object DateHelper {
     cal.getTime
   }
 
-  def beginOfWeek(anyDayInWeek: Date) = {
+  def beginOfWeek(anyDayInWeek: Date): Date = {
     val cal = new GregorianCalendar()
     cal.setTime(anyDayInWeek)
     cal.set(Calendar.HOUR_OF_DAY, 0)
@@ -93,7 +93,7 @@ object DateHelper {
     cal.getTime
   }
 
-  def endOfWeek(anyDayInWeek: Date) = {
+  def endOfWeek(anyDayInWeek: Date): Date = {
     val start = beginOfWeek(anyDayInWeek);
     val cal = new GregorianCalendar()
     cal.setTime(start)
@@ -102,7 +102,7 @@ object DateHelper {
   }
 
 
-  def endOfMonth(date: Date = new Date()) = {
+  def endOfMonth(date: Date = new Date()): Date = {
     val cal = new GregorianCalendar()
     cal.setTime(date)
     cal.set(Calendar.HOUR_OF_DAY, 23)
@@ -113,7 +113,7 @@ object DateHelper {
     cal.getTime
   }
 
-  def beginOfYear = {
+  def beginOfYear: Date = {
     val cal = new GregorianCalendar()
     cal.set(Calendar.HOUR_OF_DAY, 0)
     cal.set(Calendar.MINUTE, 0)
@@ -143,7 +143,7 @@ object DateHelper {
     dayHourMinStr + allHoursStr
   }
 
-  def getRightTimeDueToVaadinBug(d: Date) = {
+  def getRightTimeDueToVaadinBug(d: Date): Date = {
     d
     /* only a bug if time zone are set differently on server and client
     val cal = new GregorianCalendar

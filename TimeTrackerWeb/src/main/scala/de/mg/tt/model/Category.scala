@@ -16,8 +16,9 @@
 package de.mg.tt.model
 
 import java.util
-import javax.persistence._
+
 import de.mg.tt.util.HashHelper
+import javax.persistence._
 import javax.validation.constraints.NotNull
 
 @Entity
@@ -35,15 +36,15 @@ class Category(pName: String) extends Persistent {
   // make JPA happy
   def this() = this("")
 
-  override def toString = name
+  override def toString: String = name
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case that: Category =>
       this.name == that.name
     case _ => false
   }
 
-  override def hashCode() = HashHelper.hashCode(List(name))
+  override def hashCode(): Int = HashHelper.hashCode(List(name))
 
 }
 

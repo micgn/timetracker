@@ -1,32 +1,32 @@
 package de.mg.tt.model
 
+import java.util.Date
+
+import de.mg.tt.service.dao.{TTMgmtDao, TTMgmtSessionDao}
+import de.mg.tt.service.{FilterCriteria, TTMgmt, TTMgmtGateway}
 import javax.inject.Inject
 import javax.naming.InitialContext
-import javax.persistence.{PersistenceContext, EntityManager}
-
-import de.mg.tt.service.dao.{TTMgmtSessionDao, TTMgmtDao}
-import de.mg.tt.service.{TTMgmt, FilterCriteria, TTMgmtGateway}
-import org.jboss.shrinkwrap.api.asset.EmptyAsset
-import org.junit.{Before, Test}
-import org.scalatest.FunSuite
-import org.junit.runner.RunWith
-import java.util.Date
+import javax.persistence.{EntityManager, PersistenceContext}
+import org.jboss.arquillian.container.test.api.Deployment
 import org.jboss.arquillian.junit.Arquillian
 import org.jboss.shrinkwrap.api.ShrinkWrap
+import org.jboss.shrinkwrap.api.asset.EmptyAsset
 import org.jboss.shrinkwrap.api.spec.JavaArchive
-import org.jboss.arquillian.container.test.api.Deployment
+import org.junit.runner.RunWith
+import org.junit.{Before, Test}
+import org.scalatest.FunSuite
 
 @RunWith(classOf[Arquillian])
 class ArquillianTest extends FunSuite {
 
   @Inject
-  var dao: TTMgmtSessionDao = null
+  var dao: TTMgmtSessionDao = _
 
   @Inject
-  var ttmgmt: TTMgmtGateway = null
+  var ttmgmt: TTMgmtGateway = _
 
   @PersistenceContext
-  protected var em: EntityManager = null
+  protected var em: EntityManager = _
 
   @Before
   def cleanup(): Unit = {
@@ -38,7 +38,6 @@ class ArquillianTest extends FunSuite {
     assert(dao != null)
 
     val c1 = dao.create(Category("testCategory"))
-    assert(c1.id != null)
     val c2 = dao.create(Category("another"))
 
     assert(dao.findAllCategories().isEmpty)
@@ -53,7 +52,7 @@ class ArquillianTest extends FunSuite {
   }
 
   @Test
-  def testActivityCrud() = {
+  def testActivityCrud(): Unit = {
 
     val c1 = dao.create(Category("c1"))
     val c2 = dao.create(Category("c2"))
@@ -82,28 +81,28 @@ class ArquillianTest extends FunSuite {
     assert(dao.get[Category](c1.id) == c1)
     assert(dao.get[Activity](a1.id) == a1)
 
-    val read = dao.findActivities(new FilterCriteria(new Date(10), new Date(500)))
+    val read = dao.findActivities(FilterCriteria(new Date(10), new Date(500)))
     assert(read.length == 2 && read.contains(a1) && read.contains(a2))
 
-    val read2 = dao.findActivities(new FilterCriteria(new Date(250), new Date(500)))
+    val read2 = dao.findActivities(FilterCriteria(new Date(250), new Date(500)))
     read2.foreach(println)
     assert(read2.length == 1 && read2.head == a2)
 
-    val read3 = dao.findActivities(new FilterCriteria(new Date(0), new Date(1)))
+    val read3 = dao.findActivities(FilterCriteria(new Date(0), new Date(1)))
     assert(read3.length == 1 && read3.head == a1)
 
-    val read4 = dao.findActivities(new FilterCriteria(new Date(0), new Date(500), Set(Category("a"), Category("b"))))
-    assert(read4.length == 0)
+    val read4 = dao.findActivities(FilterCriteria(new Date(0), new Date(500), Set(Category("a"), Category("b"))))
+    assert(read4.isEmpty)
 
-    val read5 = dao.findActivities(new FilterCriteria(new Date(0), new Date(1), Set(c1, c2)))
+    val read5 = dao.findActivities(FilterCriteria(new Date(0), new Date(1), Set(c1, c2)))
     assert(read5.length == 1)
 
-    val read6 = dao.findActivities(new FilterCriteria(new Date(0), new Date(500), Set(c2)))
+    val read6 = dao.findActivities(FilterCriteria(new Date(0), new Date(500), Set(c2)))
     assert(read6.length == 2)
   }
 
   @Test
-  def testUpdates() = {
+  def testUpdates(): Unit = {
 
     val a1 = dao.create(
       ActivityBuilder.
@@ -120,7 +119,7 @@ class ArquillianTest extends FunSuite {
   }
 
   @Test
-  def testReverting() = {
+  def testReverting(): Unit = {
 
     val a1 = dao.create(
       ActivityBuilder.
@@ -139,29 +138,29 @@ class ArquillianTest extends FunSuite {
   }
 
   @Test
-  def testChanges = {
+  def testChanges(): Unit = {
 
     val now = new Date()
-    val notNow = new Date(System.currentTimeMillis()-100000)
+    val notNow = new Date(System.currentTimeMillis() - 100000)
 
-    ttmgmt.findActivities(new FilterCriteria(now, now))
+    ttmgmt.findActivities(FilterCriteria(now, now))
 
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(now, now)) == false)
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(notNow, notNow)) == false)
+    assert(!ttmgmt.dataAndFilterChanged(FilterCriteria(now, now)))
+    assert(!ttmgmt.dataAndFilterChanged(FilterCriteria(notNow, notNow)))
 
     // make session dirty
     ttmgmt.create(Category("xy"))
 
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(now, now)) == false)
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(notNow, notNow)) == true)
+    assert(!ttmgmt.dataAndFilterChanged(FilterCriteria(now, now)))
+    assert(ttmgmt.dataAndFilterChanged(FilterCriteria(notNow, notNow)))
 
     ttmgmt.save()
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(now, now)) == false)
-    assert(ttmgmt.dataAndFilterChanged(new FilterCriteria(notNow, notNow)) == false)
+    assert(!ttmgmt.dataAndFilterChanged(FilterCriteria(now, now)))
+    assert(!ttmgmt.dataAndFilterChanged(FilterCriteria(notNow, notNow)))
   }
 
   @Test
-  def testLookup() = {
+  def testLookup(): Unit = {
     val lookedup = new InitialContext().lookup("java:module/" + classOf[TTMgmtGateway].getSimpleName).asInstanceOf[TTMgmtGateway]
     assert(lookedup != null)
   }
@@ -176,6 +175,6 @@ object ArquillianTest {
       .addClasses(classOf[Activity], classOf[Category],
         classOf[TTMgmt], classOf[TTMgmtGateway],
         classOf[TTMgmtDao], classOf[FilterCriteria])
-      .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml");
+      .addAsManifestResource(EmptyAsset.INSTANCE, "beans.xml")
   }
 }

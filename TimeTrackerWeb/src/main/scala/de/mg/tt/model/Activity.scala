@@ -15,16 +15,17 @@
  */
 package de.mg.tt.model
 
-import java.util
-import de.mg.tt.util.HashHelper
-import javax.persistence._
-import javax.validation.constraints.NotNull
-import javax.persistence.TemporalType.TIMESTAMP
-
 import java.text.DateFormat._
+import java.util
 import java.util.{Calendar, Date, Locale}
 
+import de.mg.tt.util.HashHelper
+import javax.persistence.TemporalType.TIMESTAMP
+import javax.persistence._
+import javax.validation.constraints.NotNull
+
 import scala.collection.JavaConverters._
+import scala.collection.mutable
 
 
 @Entity
@@ -52,35 +53,38 @@ class Activity(pDescription: String, pFrom: Date, pTo: Date) extends Persistent 
   // make JPA happy
   def this() = this("", null, null)
 
-  def len = to.getTime. / (1000 * 60) - from.getTime / (1000 * 60)
+  def len: Long = to.getTime./(1000 * 60) - from.getTime / (1000 * 60)
 
-  def day = cal.get(Calendar.DAY_OF_YEAR)
-  def week = {val c = cal; /*c.add(Calendar.DATE, -1);*/ c.get(Calendar.WEEK_OF_YEAR)}
+  def day: Int = cal.get(Calendar.DAY_OF_YEAR)
+
+  def week: Int = {
+    val c = cal; /*c.add(Calendar.DATE, -1);*/ c.get(Calendar.WEEK_OF_YEAR)
+  }
 
   private def cal = { val cal = Calendar.getInstance(); cal.setTime(from); cal }
 
-  override def toString() = {
+  override def toString: String = {
     val df = getDateTimeInstance(MEDIUM, MEDIUM, Locale.GERMANY)
     val fromStr = df format from
     val toStr = df format to
     s"($fromStr) to ($toStr): $description categories: $categories"
   }
 
-  override def equals(other: Any) = other match {
+  override def equals(other: Any): Boolean = other match {
     case that: Activity =>
       this.description == that.description && this.from == that.from && this.to == that.to
     case _ => false
   }
 
-  override def hashCode() = HashHelper.hashCode(List(description, from, to))
+  override def hashCode(): Int = HashHelper.hashCode(List(description, from, to))
 
 }
 
 class ActivityBuilder(val description: String) {
 
-  var from: Date = null
-  var to: Date = null
-  var categories = scala.collection.mutable.Set[Category]()
+  var from: Date = _
+  var to: Date = _
+  var categories: mutable.Set[Category] = scala.collection.mutable.Set[Category]()
 
   def from(pFrom: Date): ActivityBuilder = {
     from = pFrom; this
@@ -98,7 +102,7 @@ class ActivityBuilder(val description: String) {
     // TODO validation
     val acti = new Activity(description, from, to)
     acti.categories.addAll(categories.asJava)
-    return acti
+    acti
   }
 
 }

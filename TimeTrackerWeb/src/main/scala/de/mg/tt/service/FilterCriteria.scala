@@ -20,8 +20,8 @@ import java.util.Date
 import de.mg.tt.model.Category
 
 /**
- * Created by gnatz on 12/31/14.
- */
-case class FilterCriteria(val from: Date,
-                          val to:Date,
-                          val categories: Set[Category] = Set.empty)
+  * Created by gnatz on 12/31/14.
+  */
+case class FilterCriteria(from: Date,
+                          to: Date,
+                          categories: Set[Category] = Set.empty)

@@ -15,15 +15,14 @@
  */
 package de.mg.tt.service
 
+import de.mg.tt.model.{Activity, Category, Persistent}
+import de.mg.tt.service.dao.TTMgmtSessionDao
+import de.mg.tt.util.DateHelper
 import javax.ejb.TransactionAttributeType._
 import javax.ejb._
 import javax.enterprise.context.SessionScoped
 import javax.inject.Inject
 import javax.interceptor.Interceptors
-
-import de.mg.tt.model.{Activity, Category, Persistent}
-import de.mg.tt.service.dao.TTMgmtSessionDao
-import de.mg.tt.util.DateHelper
 
 /**
  * Created by gnatz on 1/4/15.
@@ -43,51 +42,46 @@ class TTMgmtGateway extends TTMgmt {
   private var lastFilteredCats: Set[Category] = Set.empty
 
   @Inject
-  var dao: TTMgmtSessionDao = null
+  var dao: TTMgmtSessionDao = _
 
   @Inject
-  var exportFormatter: ExportFormatter = null
+  var exportFormatter: ExportFormatter = _
 
   @Inject
-  var statisticsLogic: StatisticsLogic = null
+  var statisticsLogic: StatisticsLogic = _
 
   def create[T <: Persistent](entity: T)(implicit mf: Manifest[T]): T = {
     val saved = dao.create(entity)
     saved match {
-      case a: Activity => {
+      case a: Activity =>
         activityCache ++= List(a)
         activityCache = activityCache.sortWith((a1, a2) => a1.from before a2.from)
-      }
-      case c: Category => {
+      case c: Category =>
         categoryCache ++= List(c)
         categoryCache = categoryCache.sortWith((c1, c2) => c1.name < c2.name)
-      }
     }
     saved
   }
 
   def get[T <: Persistent](id: Long)(implicit mf: Manifest[T]): T = {
     mf.runtimeClass match {
-      case a if a == classOf[Activity] => {
+      case a if a == classOf[Activity] =>
         val ac = activityCache.find(ac => ac.id == id)
         if (ac.isDefined) return ac.get.asInstanceOf[T]
-      }
-      case c if c == classOf[Category] => {
+      case c if c == classOf[Category] =>
         val ca = categoryCache.find(ca => ca.id == id)
         if (ca.isDefined) return ca.get.asInstanceOf[T]
-      }
     }
-    return dao.get[T](id)
+    dao.get[T](id)
   }
 
   def delete(entity: Persistent): Unit = {
     dao.delete(entity)
     entity match {
       case a: Activity => activityCache = activityCache.diff(List(a))
-      case c: Category => {
+      case c: Category =>
         categoryCache = categoryCache.diff(List(c))
         activityCache.foreach(a => a.categories.remove(c))
-      }
     }
   }
 
@@ -113,13 +107,13 @@ class TTMgmtGateway extends TTMgmt {
     } else activityCache
   }
 
-  def save() = {
+  def save(): Unit = {
     activityCache = Nil
     categoryCache = Nil
     dao.save()
   }
 
-  def revert() = {
+  def revert(): Unit = {
     activityCache = Nil
     categoryCache = Nil
     dao.revert()
@@ -130,7 +124,7 @@ class TTMgmtGateway extends TTMgmt {
     filterChanged(newCriteria) && dao.hasChanges
   }
 
-  def hasChanges = dao.hasChanges
+  def hasChanges: Boolean = dao.hasChanges
 
   private def filterChanged(newCriteria: FilterCriteria) = {
     if (this.criteria.isEmpty)
@@ -138,11 +132,11 @@ class TTMgmtGateway extends TTMgmt {
     this.criteria.get != newCriteria
   }
 
-  def lastFilteredCategories() = lastFilteredCats
+  def lastFilteredCategories(): Set[Category] = lastFilteredCats
 
 
   def buildExportCsv(filterCriteria: FilterCriteria): String = {
-    var exp = "";
+    var exp = ""
     findActivities(filterCriteria).foreach(a => exp += exportFormatter.toCsv(a))
     exp
   }
@@ -155,11 +149,11 @@ class TTMgmtGateway extends TTMgmt {
       map { case (date, activities) =>
           (date, activities.foldLeft(0L)((sum: Long, activity: Activity) => sum + activity.len)) }
 
-    var exp = "Datum;Datum;Minuten;Stunden\n";
-    timesPerDay.toList.sortBy{ case (date, len) => date }.
-      foreach { case (date, len) => exp += exportFormatter.toRichCsv(date, len) };
+    var exp = "Datum;Datum;Minuten;Stunden\n"
+    timesPerDay.toList.sortBy { case (date, _) => date }.
+      foreach { case (date, len) => exp += exportFormatter.toRichCsv(date, len) }
 
-    exp;
+    exp
   }
 
   def buildStatisticsCsv: String = {

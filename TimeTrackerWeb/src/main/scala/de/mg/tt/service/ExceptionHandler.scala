@@ -18,8 +18,8 @@ package de.mg.tt.service
 import javax.interceptor.{AroundInvoke, InvocationContext}
 
 /**
- * Created by gnatz on 1/5/15.
- */
+  * Created by gnatz on 1/5/15.
+  */
 class ExceptionHandler extends Serializable {
 
   // prevents that the stateful session bean gets removed due to exceptions
@@ -27,12 +27,12 @@ class ExceptionHandler extends Serializable {
   @AroundInvoke
   def handle(ic: InvocationContext): Object = {
     try {
-      return ic.proceed()
+      ic.proceed()
     } catch {
       case e: Exception => {
         println("ERROR: Exception caught!")
         e.printStackTrace()
-        return null
+        null
       }
     }
   }

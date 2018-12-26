@@ -18,7 +18,7 @@ package de.mg.tt.util
 object HashHelper {
 
   def hashCode(attrs: List[Any]): Int = attrs match {
-    case h :: t => (if (h != null) h.hashCode else 0) + 31 * (hashCode(t))
+    case h :: t => (if (h != null) h.hashCode else 0) + 31 * hashCode(t)
     case _ => 1
   }
 

@@ -15,15 +15,14 @@
  */
 package de.mg.tt.service.dao
 
+import de.mg.tt.model.{Activity, Category, Persistent}
+import de.mg.tt.service.{ExceptionHandler, FilterCriteria}
 import javax.annotation.{PostConstruct, PreDestroy}
 import javax.ejb.TransactionAttributeType.{NEVER, REQUIRES_NEW}
 import javax.ejb._
 import javax.enterprise.context.SessionScoped
 import javax.interceptor.Interceptors
 import javax.persistence._
-
-import de.mg.tt.model.Persistent
-import de.mg.tt.service.{ExceptionHandler, FilterCriteria}
 
 
 @SessionScoped
@@ -36,22 +35,22 @@ class TTMgmtSessionDao {
   // since the injection of extended entity manager leads to an enetity manager,
   // which does detach entitites immediately, we create an extended entity manager manually
   //@PersistenceContext(`type` = EXTENDED)
-  private var em: EntityManager = null
+  private var em: EntityManager = _
 
   @PersistenceUnit
-  private val factory: EntityManagerFactory = null;
+  private val factory: EntityManagerFactory = null
 
-  private var delegate : TTMgmtDao = null
+  private var delegate: TTMgmtDao = _
 
   @PostConstruct
-  def init = {
+  def init(): Unit = {
     // create extended application-managed entity manager
     em = factory.createEntityManager()
     delegate = new TTMgmtDao(em)
   }
 
   @PreDestroy
-  def destroy = {
+  def destroy(): Unit = {
     em.close()
     delegate = null
   }
@@ -62,18 +61,18 @@ class TTMgmtSessionDao {
 
   def delete(entity: Persistent): Unit = delegate.delete(entity)
 
-  def findAllCategories() = delegate.findAllCategories()
+  def findAllCategories(): List[Category] = delegate.findAllCategories()
 
-  def findActivities(criteria: FilterCriteria) = delegate.findActivities(criteria)
+  def findActivities(criteria: FilterCriteria): List[Activity] = delegate.findActivities(criteria)
 
-  def findAllActivities() = delegate.findAllActivities()
+  def findAllActivities(): List[Activity] = delegate.findAllActivities()
 
   @TransactionAttribute(REQUIRES_NEW)
-  def save() = {
+  def save(): Unit = {
     em.joinTransaction()
   }
 
-  def revert() = em.clear()
+  def revert(): Unit = em.clear()
 
   def hasChanges: Boolean = {
     em.getDelegate.asInstanceOf[org.eclipse.persistence.internal.jpa.EntityManagerImpl].

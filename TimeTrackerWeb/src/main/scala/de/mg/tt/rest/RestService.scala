@@ -15,18 +15,18 @@
  */
 package de.mg.tt.rest
 
-import java.text.{DateFormat, SimpleDateFormat}
+import java.text.SimpleDateFormat
 import java.util
 import java.util.Date
-import javax.ejb.Stateless
-import javax.inject.Inject
-import javax.ws.rs._
 
 import de.mg.tt.api._
+import de.mg.tt.model._
 import de.mg.tt.service.FilterCriteria
 import de.mg.tt.service.dao.TTMgmtDao
 import de.mg.tt.util.DateHelper._
-import de.mg.tt.model._
+import javax.ejb.Stateless
+import javax.inject.Inject
+import javax.ws.rs._
 
 import scala.collection.JavaConverters._
 
@@ -36,14 +36,15 @@ import scala.collection.JavaConverters._
 class RestService {
 
   @Inject
-  var dao: TTMgmtDao = null
+  var dao: TTMgmtDao = _
 
   @GET
   @Produces(Array("application/xml","application/json"))
   def load(@PathParam("dateStr") dateStr: String): TTData = {
 
     val date = new SimpleDateFormat("ddMMyyyy").parse(dateStr)
-    def criteria = new FilterCriteria(dayStart(date), dayEnd(date))
+
+    def criteria = FilterCriteria(dayStart(date), dayEnd(date))
     val activities = dao.findActivities(criteria)
     val cats = dao.findAllCategories()
 
@@ -59,18 +60,18 @@ class RestService {
       a.categories.asScala.foreach(cat => ttCats.add(cat.name))
       ttA.setCategories(ttCats)
 
-      ttAs.add(ttA);
+      ttAs.add(ttA)
     }
     result.setActivities(ttAs)
     result.setAvailableCategories(cats.map(cat => cat.name).asJava)
-    result.setWeekMinutes(totalMinutesInWeek(date));
+    result.setWeekMinutes(totalMinutesInWeek(date))
     result
   }
 
   private def totalMinutesInWeek(dayInWeek: Date): Long = {
-    val criteria = new FilterCriteria(beginOfWeek(dayInWeek), endOfWeek(dayInWeek))
+    val criteria = FilterCriteria(beginOfWeek(dayInWeek), endOfWeek(dayInWeek))
     val activities = dao.findActivities(criteria)
-    activities.map(a => a.to.getTime() - a.from.getTime()).sum / (1000 * 60)
+    activities.map(a => a.to.getTime - a.from.getTime).sum / (1000 * 60)
   }
 
 
@@ -90,10 +91,10 @@ class RestService {
     val cats = dao.findAllCategories()
 
     // delete activities of existing any more
-    val savedIds = ttData.getActivities.asScala.map(a => a.getId).filter(id => id != null)
+    val savedIds = ttData.getActivities.asScala.map(a => a.getId)
     for (pa <- persistentAs) if (!savedIds.contains(pa.id)) dao.delete(pa)
 
-    for (ttA <- ttData.getActivities().asScala) {
+    for (ttA <- ttData.getActivities.asScala) {
       val persistentA = persistentAs.find(a => a.id == ttA.getId)
       val pAc = if (persistentA.isDefined) {
         val pAc = persistentA.get
@@ -101,7 +102,7 @@ class RestService {
         pAc.to = ttA.getTo
         dao.update(pAc)
       } else {
-        val ac = new Activity("", ttA.getFrom(), ttA.getTo())
+        val ac = new Activity("", ttA.getFrom, ttA.getTo)
         dao.create(ac)
       }
 

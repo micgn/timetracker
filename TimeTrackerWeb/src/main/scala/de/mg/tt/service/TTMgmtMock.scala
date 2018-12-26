@@ -62,7 +62,7 @@ class TTMgmtMock extends TTMgmt {
   }
 
 
-  def findAllCategories() = {
+  def findAllCategories(): List[Category] = {
     if (cats == Nil) {
       val c1 = new Category("c 1")
       c1.id = 1
@@ -73,7 +73,7 @@ class TTMgmtMock extends TTMgmt {
     cats
   }
 
-  def findActivities(criteria: FilterCriteria) = {
+  def findActivities(criteria: FilterCriteria): List[Activity] = {
 
     this.criteria = Some(criteria)
 
@@ -114,18 +114,18 @@ class TTMgmtMock extends TTMgmt {
     case t if t == classOf[Category] => cats.find(c => c.id == id).get.asInstanceOf[T]
   }
 
-  def revert() = {
+  def revert(): Unit = {
     changes = false
     cats = Nil
     activities = Nil
   }
 
-  def save() = changes = false
+  def save(): Unit = changes = false
 
   def dataAndFilterChanged(criteria: FilterCriteria): Boolean =
-    changes && this.criteria.forall(c => c != criteria)
+    changes && !this.criteria.contains(criteria)
 
-  def lastFilteredCategories() = Set.empty
+  def lastFilteredCategories(): Set[Category] = Set.empty
 
   def hasChanges = true
 

@@ -17,16 +17,16 @@ package de.mg.tt.service
 
 import java.io.PrintWriter
 import java.util.Date
+
+import de.mg.tt.service.dao.TTMgmtDao
+import de.mg.tt.util.DateHelper._
 import javax.ejb._
 import javax.inject.Inject
 import javax.interceptor.Interceptors
 
-import de.mg.tt.service.dao.{TTMgmtSessionDao, TTMgmtDao}
-import de.mg.tt.util.DateHelper._
-
 /**
- * Created by gnatz on 4/3/15.
- */
+  * Created by gnatz on 4/3/15.
+  */
 @Stateless
 @Interceptors(Array(classOf[ExceptionHandler]))
 class ExportTimer {
@@ -34,15 +34,15 @@ class ExportTimer {
   private val PATH = "/home/gnatz/ttsave/"
 
   @Inject
-  var dao: TTMgmtDao = null
+  var dao: TTMgmtDao = _
 
   @Inject
-  var exportFormatter: ExportFormatter = null
+  var exportFormatter: ExportFormatter = _
 
-  @Schedule(minute="55", hour="23", persistent = false)
+  @Schedule(minute = "55", hour = "23", persistent = false)
   def timeout(): Unit = {
 
-    val criteria = new FilterCriteria(beginOfYear, dayEnd(new Date()))
+    val criteria = FilterCriteria(beginOfYear, dayEnd(new Date()))
     val csv = buildExportCsv(criteria)
 
     val fname = PATH + "ttexport-" + year() + "-" + month0Based() + "-" + dayOfMonth()
@@ -50,12 +50,12 @@ class ExportTimer {
     System.out.println("saving " + csv.length + " chars for " + criteria + " to " + fname)
     val out = new PrintWriter(fname)
     out.print(csv)
-    out.flush
-    out.close
+    out.flush()
+    out.close()
   }
 
   private def buildExportCsv(filterCriteria: FilterCriteria): String = {
-    var exp = "";
+    var exp = ""
     dao.findActivities(filterCriteria).foreach(a => exp += exportFormatter.toCsv(a))
     exp
   }

@@ -15,12 +15,11 @@
  */
 package de.mg.tt.service.dao
 
+import de.mg.tt.model.{Activity, Category, Persistent}
+import de.mg.tt.service.{ExceptionHandler, FilterCriteria}
 import javax.ejb._
 import javax.interceptor.Interceptors
 import javax.persistence._
-
-import de.mg.tt.model.{Activity, Category, Persistent}
-import de.mg.tt.service.{ExceptionHandler, FilterCriteria}
 
 import scala.collection.JavaConverters._
 
@@ -31,7 +30,7 @@ import scala.collection.JavaConverters._
 class TTMgmtDao {
 
   @PersistenceContext
-  private var em: EntityManager = null
+  private var em: EntityManager = _
 
   def this(em: EntityManager) = {
     this()
@@ -60,10 +59,10 @@ class TTMgmtDao {
     em.remove(entity)
   }
 
-  def findAllCategories() =
+  def findAllCategories(): List[Category] =
     resultList[Category](em.createNamedQuery("findAllCategories"))
 
-  def findActivities(criteria: FilterCriteria) = {
+  def findActivities(criteria: FilterCriteria): List[Activity] = {
     assert(criteria != null)
     var q = "select a from Activity a where a.from >= :fromDate and a.to <= :toDate"
     var i = 0
@@ -80,7 +79,7 @@ class TTMgmtDao {
       .setMaxResults(5000))
   }
 
-  def findAllActivities() = resultList[Activity](em.createNamedQuery("findAllActivities"))
+  def findAllActivities(): List[Activity] = resultList[Activity](em.createNamedQuery("findAllActivities"))
 
   private def resultList[T](query: Query) = query.getResultList.asScala.toList.asInstanceOf[List[T]]
 
