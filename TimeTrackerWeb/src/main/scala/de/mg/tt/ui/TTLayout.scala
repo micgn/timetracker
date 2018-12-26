@@ -16,8 +16,9 @@
 package de.mg.tt.ui
 
 import com.vaadin.server.Sizeable.Unit._
-import com.vaadin.shared.ui.ContentMode
 import com.vaadin.ui._
+import com.vaadin.v7.shared.ui.label.ContentMode
+import com.vaadin.v7.ui.Label
 import de.mg.tt.ui.compAction.{ActionView, ActionViewModel}
 import de.mg.tt.ui.compFilter.{FilterView, FilterViewModel}
 import de.mg.tt.ui.utils.LayoutUtils._

@@ -24,7 +24,7 @@ import java.text.SimpleDateFormat
 import java.util
 import java.util.{Date, Locale}
 
-import com.vaadin.annotations.Widgetset
+import com.vaadin.annotations.{Theme, Widgetset}
 import com.vaadin.cdi.CDIUI
 import com.vaadin.server.StreamResource.StreamSource
 import com.vaadin.server.{FileDownloader, StreamResource, VaadinRequest}
@@ -49,7 +49,7 @@ import scala.collection.JavaConverters._
 
 @CDIUI("")
 @Widgetset("TTWidgetset")
-//@Theme("tttheme")
+@Theme("tttheme")
 class TTUIController extends UI {
 
   @Inject

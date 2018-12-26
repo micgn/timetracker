@@ -1,9 +1,5 @@
 <module>
-
-
     <inherits name="org.vaadin.addons.tuningdatefield.widgetset.TuningDateFieldWidgetset" />
-
-    <stylesheet src="colorpicker/styles.css"/>
 
     <inherits name="com.vaadin.DefaultWidgetSet"/>
 

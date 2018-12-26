@@ -18,9 +18,10 @@ package de.mg.tt.ui.compFilter
 import java.util.{Locale, TimeZone}
 
 import com.vaadin.server.Sizeable
-import com.vaadin.shared.ui.ContentMode
-import com.vaadin.ui.{AbstractLayout, Label}
+import com.vaadin.ui.AbstractLayout
 import com.vaadin.v7.shared.ui.datefield.Resolution
+import com.vaadin.v7.shared.ui.label.ContentMode
+import com.vaadin.v7.ui.Label
 import de.mg.tt.ui.utils.LayoutUtils
 import de.mg.tt.ui.utils.LayoutUtils._
 import org.vaadin.addons.tuningdatefield.widgetset.client.ui.calendar.CalendarResolution

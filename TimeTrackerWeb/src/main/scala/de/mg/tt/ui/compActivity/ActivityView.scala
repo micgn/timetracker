@@ -18,9 +18,10 @@ package de.mg.tt.ui.compActivity
 import java.util.{Date, Locale, TimeZone}
 
 import com.vaadin.server.Sizeable
-import com.vaadin.shared.ui.ContentMode
-import com.vaadin.ui.{Button, FormLayout, Label, UI}
+import com.vaadin.ui.{Button, FormLayout, UI}
 import com.vaadin.v7.shared.ui.datefield.Resolution
+import com.vaadin.v7.shared.ui.label.ContentMode
+import com.vaadin.v7.ui.Label
 import de.mg.tt.ui.utils.LayoutUtils._
 import de.mg.tt.ui.utils.ListenerUtils._
 
