@@ -122,7 +122,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-cdi</artifactId>
-            <version>1.0.0.alpha2</version>
+            <version>3.0.1</version>
         </dependency>
 
         <dependency>
@@ -252,6 +252,9 @@
                 <groupId>com.vaadin</groupId>
                 <artifactId>vaadin-maven-plugin</artifactId>
                 <version>8.6.3</version>
+                <configuration>
+                    <gwtSdkFirstInClasspath>true</gwtSdkFirstInClasspath>
+                </configuration>
                 <executions>
                     <execution>
                         <goals>
