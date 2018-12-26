@@ -1,0 +1,3 @@
+* replace deprecated Vaadin 7 classes
+* reorganize maven generation into webapp/VAADIN/themes
+* upgrade JEE/Glassfish
