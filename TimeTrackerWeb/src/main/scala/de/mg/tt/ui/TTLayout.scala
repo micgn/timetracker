@@ -63,7 +63,6 @@ class TTLayout(ui: TTUIController, filterVM: FilterViewModel, actionVM: ActionVi
 
     ui.table.setSelectable(false)
     ui.table.setSizeFull()
-    //ui.table.setSizeUndefined()
     p.addComponent(ui.table)
   }
 }

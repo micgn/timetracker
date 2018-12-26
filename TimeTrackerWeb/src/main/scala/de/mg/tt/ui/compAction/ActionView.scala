@@ -17,7 +17,7 @@ package de.mg.tt.ui.compAction
 
 import com.vaadin.server.Sizeable
 import com.vaadin.ui.AbstractLayout
-import com.vaadin.v7.data.Property.{ValueChangeEvent, ValueChangeListener}
+import com.vaadin.v7.data.Property.ValueChangeEvent
 import de.mg.tt.ui.utils.LayoutUtils._
 
 /**
@@ -25,7 +25,7 @@ import de.mg.tt.ui.utils.LayoutUtils._
   */
 object ActionView {
 
-  def setup(m: ActionViewModel, p: AbstractLayout) = {
+  def setup(m: ActionViewModel, p: AbstractLayout): Unit = {
 
     val selectContP = hl(border = true)
     selectContP.setCaption("selection")
@@ -49,10 +49,8 @@ object ActionView {
     m.addCatBtn.setEnabled(false)
     addCatP.addComponent(m.addCatBtn)
 
-    m.catChooser.addValueChangeListener(new ValueChangeListener {
-      override def valueChange(valueChangeEvent: ValueChangeEvent): Unit =
-        m.addCatBtn.setEnabled(m.catChooser.getValue != null)
-    })
+    m.catChooser.addValueChangeListener((_: ValueChangeEvent)
+    => m.addCatBtn.setEnabled(m.catChooser.getValue != null))
 
     btn(m.deleteBtn, "delete")
 
@@ -74,10 +72,8 @@ object ActionView {
     m.delCatBtn.setWidth(5, Sizeable.Unit.EM)
     m.delCatBtn.setEnabled(false)
     delCatP.addComponent(m.delCatBtn)
-    m.delCatChooser.addValueChangeListener(new ValueChangeListener {
-      override def valueChange(valueChangeEvent: ValueChangeEvent): Unit =
-        m.delCatBtn.setEnabled(m.delCatChooser.getValue != null)
-    })
+    m.delCatChooser.addValueChangeListener((_: ValueChangeEvent) =>
+      m.delCatBtn.setEnabled(m.delCatChooser.getValue != null))
     catContP.addComponent(delCatP)
 
     val actContP = hl(border = true)

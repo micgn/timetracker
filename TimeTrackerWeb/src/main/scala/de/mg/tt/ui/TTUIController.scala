@@ -73,7 +73,7 @@ class TTUIController extends UI {
     registerListeners
     MoneyController.registerListeners(actionMiscVM.openMoneyCalc, moneyVM.moneyCalcBtn, moneyVM, this, service)
     val daysController = new DaysController(filterVM)
-    daysController.init
+    daysController.init()
   }
 
   def initData(): Unit = {
@@ -106,7 +106,7 @@ class TTUIController extends UI {
     globalListenerMethods = List(() => saveRevertEnabler())
     saveRevertEnabler()
 
-    def saveRevertEnabler() = {
+    def saveRevertEnabler(): Unit = {
       val changes = service.hasChanges
       actionVM.saveBtn.setEnabled(changes)
       actionVM.revertBtn.setEnabled(changes)
@@ -164,7 +164,7 @@ class TTUIController extends UI {
     })
 
     listenerBtn(activityVM.actAddSaveBtn, {
-      activityVM.actAddBtn.click();
+      activityVM.actAddBtn.click()
       actionVM.saveBtn.click()
     })
 
@@ -183,7 +183,7 @@ class TTUIController extends UI {
 
     listenerBtn(actionVM.deleteBtn, needsSelection({
       selectedActivities.foreach(aId => service.deleteActivity(aId))
-      reloadTable
+      reloadTable()
       Notification.show("deleted", Notification.Type.TRAY_NOTIFICATION)
     }))
 
@@ -264,8 +264,6 @@ class TTUIController extends UI {
       )
     }
 
-    // TODO create separate MiscController
-
     // register downloader at export button
     new FileDownloader(exportStream).extend(actionMiscVM.exportBtn)
 
@@ -294,9 +292,9 @@ class TTUIController extends UI {
   def reloadTable(): Unit = {
 
     if (service.dataAndFilterChanged(filterCriteria))
-      TTLayout.question("Revert all changes?", doReload)
+      TTLayout.question("Revert all changes?", doReload())
     else
-      doReload
+      doReload()
 
     def calcSums(activities: List[Activity], sum: Long, typeOfSum: Date => Int): List[Option[Long]] = {
       activities match {
@@ -328,7 +326,7 @@ class TTUIController extends UI {
       var monthSums = calcSums(activities, 0, month0Based)
       var yearSums = calcSums(activities, 0, year)
 
-      var prevWeek = -1;
+      var prevWeek = -1
       var prevDay = -1
       activities.foreach(a => {
         var catStr = a.categories.toString

@@ -19,14 +19,13 @@ import com.vaadin.server.Sizeable
 import com.vaadin.ui.{Button, FormLayout, UI}
 import de.mg.tt.ui.utils.LayoutUtils._
 import de.mg.tt.ui.utils.ListenerUtils._
-import de.mg.tt.ui.utils.{LayoutUtils, ListenerUtils}
 
 /**
  * Created by gnatz on 7/26/15.
  */
 object CategoryView {
 
-  def openCategoryWindow(m: CategoryViewModel) = {
+  def openCategoryWindow(m: CategoryViewModel): Unit = {
     m.categoryW.setCaption("Category")
     m.categoryW.setModal(true)
     m.categoryW.setClosable(false)

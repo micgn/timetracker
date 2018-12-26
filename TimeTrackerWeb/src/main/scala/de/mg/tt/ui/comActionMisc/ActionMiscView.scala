@@ -1,6 +1,6 @@
 package de.mg.tt.ui.comActionMisc
 
-import com.vaadin.ui.{UI, FormLayout}
+import com.vaadin.ui.{FormLayout, UI}
 import de.mg.tt.ui.utils.LayoutUtils._
 
 /**
@@ -8,7 +8,7 @@ import de.mg.tt.ui.utils.LayoutUtils._
   */
 object ActionMiscView {
 
-  def openActionMiscWindow(m: ActionMiscViewModel) = {
+  def openActionMiscWindow(m: ActionMiscViewModel): Unit = {
     m.miscW.setCaption("Money")
     m.miscW.setModal(true)
     m.miscW.setClosable(true)

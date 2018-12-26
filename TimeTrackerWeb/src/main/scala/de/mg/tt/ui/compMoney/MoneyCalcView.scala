@@ -15,7 +15,7 @@
  */
 package de.mg.tt.ui.compMoney
 
-import com.vaadin.ui.{Window, FormLayout, UI}
+import com.vaadin.ui.{FormLayout, UI}
 import de.mg.tt.ui.utils.LayoutUtils._
 
 /**
@@ -23,7 +23,7 @@ import de.mg.tt.ui.utils.LayoutUtils._
  */
 object MoneyCalcView {
 
-  def openMoneyCalcWindow(m: MoneyCalcViewModel, hours: Float) = {
+  def openMoneyCalcWindow(m: MoneyCalcViewModel, hours: Float): Unit = {
     m.moneyCalcW.setCaption("Money")
     m.moneyCalcW.setModal(true)
     m.moneyCalcW.setClosable(true)

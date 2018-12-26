@@ -40,7 +40,7 @@ class DaysController(filterVM: FilterViewModel) {
   private var currentHolidays: util.List[Holiday] = _
 
 
-  def init = {
+  def init() = {
     val now = new Date()
     currentHolidays = holidayApi.get(year(now), month1Based(now))
 

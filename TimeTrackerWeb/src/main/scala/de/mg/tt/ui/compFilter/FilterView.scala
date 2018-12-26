@@ -31,7 +31,7 @@ import org.vaadin.addons.tuningdatefield.widgetset.client.ui.calendar.CalendarRe
  */
 object FilterView {
 
-  def setup(m: FilterViewModel, p: AbstractLayout) = {
+  def setup(m: FilterViewModel, p: AbstractLayout): Unit = {
     val monthP = hl(margin = false)
 
     p.addComponent(monthP)

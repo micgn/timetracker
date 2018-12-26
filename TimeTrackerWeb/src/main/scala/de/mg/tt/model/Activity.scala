@@ -99,7 +99,6 @@ class ActivityBuilder(val description: String) {
   }
 
   def build: Activity = {
-    // TODO validation
     val acti = new Activity(description, from, to)
     acti.categories.addAll(categories.asJava)
     acti

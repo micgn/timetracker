@@ -46,7 +46,7 @@ object DateHelper {
     year(d1)==year(d2) && month0Based(d1) == month0Based(d2) && dayOfMonth(d1) == dayOfMonth(d2)
 
   private def get(date: Date, x: Int) = {
-    val cal = java.util.Calendar.getInstance();
+    val cal = java.util.Calendar.getInstance()
     cal.setTime(date)
     cal.get(x)
   }

@@ -30,7 +30,7 @@ import de.mg.tt.ui.utils.ListenerUtils._
  */
 object ActivityView {
 
-  def openActivityWindow(m: ActivityViewModel) = {
+  def openActivityWindow(m: ActivityViewModel): Unit = {
 
     val df = "EE dd.MM.yy HH:mm"
 
